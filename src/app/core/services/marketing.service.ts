@@ -7,11 +7,13 @@ import { environment } from '../../../environments/environment';
 import { MarketCategory } from '../models/market_category.models';
 import { Offer } from '../models/offer.models';
 import { Coupon } from '../models/coupon.models';
+import { paginatedInvoices } from '../models/invoice_item.models';
 import { Seller } from '../models/seller.models';
 import { Shop } from '../models/shop.models';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { Product } from '../models/product.models';
-
+import { InvoiceDetail } from '../models/invoice_detail';
+ 
 import { AuthfakeauthenticationService } from './authfake.service';
 
 @Injectable({ providedIn: 'root' })
@@ -118,6 +120,15 @@ export class MarketingService {
   getCoupon() {
     return this.http.get<Coupon[]>(environment.backend + `/market/coupon`, this.httpOptions);
   }
+
+  getInvoices(page) {
+    return this.http.get<paginatedInvoices>(environment.backend + `/order/invoices/list?page=${page}&limit=10`, this.httpOptions);
+  }
+
+  getInvoiceById(id) {
+    return this.http.get<InvoiceDetail>(environment.backend + `/order/invoices/${id}`, this.httpOptions);
+  }
+
   delCoupon(sysInfo) {
     return this.http.delete(environment.backend + `/market/coupon?id=` + sysInfo, this.httpOptions);
   }

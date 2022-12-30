@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, NgModule, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MarketingService } from '../../../core/services/marketing.service';
 import { listData } from './data';
-
-import { InvoiceList } from './list.model';
+import { paginatedInvoices } from '../../../core/models/invoice_item.models';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss']
+  styleUrls: ['./list.component.scss'],
 })
 
 /**
@@ -18,23 +18,31 @@ export class ListComponent implements OnInit {
   // bread crumb items
   breadCrumbItems: Array<{}>;
 
-  listData: InvoiceList[];
+  listData: paginatedInvoices;
 
-  constructor() { }
+  loading = false;
+  page = 1;
+  totalItems = 0;
+
+  constructor(private setserv: MarketingService) { }
 
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'Invoices' }, { label: 'List', active: true }];
-
     /**
      * fetches the data
      */
-    this._fetchData();
+    this.navigateToPage(1);
   }
 
-  /**
-   * fetches the invoice list data
-   */
-  private _fetchData() {
-    this.listData = listData;
+  navigateToPage(nextPage){
+    console.log(nextPage);
+    this.loading = true;
+    this.setserv.getInvoices(nextPage).subscribe(invoices => {
+      this.listData = invoices;
+      this.page = invoices.page;
+      this.totalItems = invoices.totalDocs;
+      this.loading = false;
+    })
   }
+
 }

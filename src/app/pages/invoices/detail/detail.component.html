@@ -6,12 +6,12 @@
 
   <!-- end page title -->
 
-  <div class="row">
+  <div class="row" *ngIf="loading === false && invoiceDetail">
     <div class="col-lg-12">
       <div class="card">
         <div class="card-body">
           <div class="invoice-title">
-            <h4 class="float-right font-size-16">Order #1</h4>
+            <h4 class="float-right font-size-16">Order #{{ invoiceDetail.order_id }}</h4>
             <div class="mb-4">
               <img src="assets/images/logo-dark.png" alt="logo" height="20" />
             </div>
@@ -21,34 +21,34 @@
             <div class="col-6">
               <address>
                 <strong>Billed To:</strong><br>
-                Ali<br>
-                Test<br>
-                Apt. 4B<br>
-                SAUDI ARAB, 100
+                {{ invoiceDetail.customer_id.billingAddress.fullname }}<br>
+                {{ invoiceDetail.customer_id.billingAddress.street }}<br>
+                {{ invoiceDetail.customer_id.billingAddress.city }}<br>
+                {{ invoiceDetail.customer_id.billingAddress.country }}, {{ invoiceDetail.customer_id.billingAddress.zipCode }}
               </address>
             </div>
             <div class="col-6 text-right">
               <address>
                 <strong>Shipped To:</strong><br>
-                Ali<br>
-                Test<br>
-                Apt. 4B<br>
-                SAUDI ARAB, 100
+                {{ invoiceDetail.deliveryInfo.name }}<br>
+                {{ invoiceDetail.deliveryInfo.address }}<br>
+                {{ invoiceDetail.deliveryInfo.city }}<br>
+                {{ invoiceDetail.deliveryInfo.country }}, {{ invoiceDetail.deliveryInfo.postcode }}
               </address>
             </div>
           </div>
           <div class="row">
             <div class="col-6 mt-3">
               <address>
-                <strong>Payment Method:</strong><br>
-                Visa ending **** 4242<br>
-                test@gmail.com
+                <strong></strong><br>
+                <br>
+                {{ invoiceDetail.deliveryInfo.email }}
               </address>
             </div>
             <div class="col-6 mt-3 text-right">
               <address>
                 <strong>Order Date:</strong><br>
-                June 22, 2022<br><br>
+                {{ invoiceDetail.createdAt | date: 'longDate' }}<br><br>
               </address>
             </div>
           </div>
@@ -65,27 +65,32 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>01</td>
-                  <td>18K test</td>
-                  <td class="text-right">SAR 100.00</td>
+                <tr *ngFor="let product of invoiceDetail.products; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ product.description_en }}</td>
+                  <td class="text-right">SAR {{ product.extra_price }}</td>
                 </tr>
 
 
                 <tr>
                   <td colspan="2" class="text-right">Sub Total</td>
-                  <td class="text-right">SAR 100.00</td>
+                  <td class="text-right">SAR {{ invoiceDetail.price }}</td>
+                </tr>
+                <tr >
+                  <td colspan="2" class="border-0 text-right">
+                    <strong>Discount</strong></td>
+                  <td class="border-0 text-right">{{ invoiceDetail.discountValue }}</td>
                 </tr>
                 <tr>
                   <td colspan="2" class="border-0 text-right">
                     <strong>Shipping</strong></td>
-                  <td class="border-0 text-right">FREE</td>
+                  <td class="border-0 text-right">{{ invoiceDetail.shippingPrice }}</td>
                 </tr>
                 <tr>
                   <td colspan="2" class="border-0 text-right">
                     <strong>Total</strong></td>
                   <td class="border-0 text-right">
-                    <h4 class="m-0">SAR 100.00</h4>
+                    <h4 class="m-0">SAR {{ invoiceDetail.totalPrice }}</h4>
                   </td>
                 </tr>
               </tbody>
@@ -102,5 +107,14 @@
     </div>
   </div>
   <!-- end row -->
+
+  <div class="row" *ngIf="loading === true">
+    <div class="col-12">
+      <div class="text-center my-3">
+        <div class="text-success"><i
+            class="bx bx-loader bx-spin font-size-18 align-middle mr-2"></i> Loading</div>
+      </div>
+    </div> <!-- end col-->
+  </div>
 
 </div> <!-- container-fluid -->

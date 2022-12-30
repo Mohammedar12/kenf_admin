@@ -145,6 +145,16 @@
         </div>
 
         <div class="form-group">
+          <label for="password">Password</label>
+
+          <input type="text" formControlName="password" class="form-control" id="password"
+            [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">Password is required</div>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label for="code">Code</label>
 
           <input type="text" formControlName="code" class="form-control" id="code"
@@ -294,6 +304,16 @@
             [ngClass]="{ 'is-invalid': submitted && fe.user.errors }" />
           <div *ngIf="submittedEdit && fe.user.errors" class="invalid-feedback">
             <div *ngIf="fe.user.errors.required">User is required</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+
+          <input type="text" formControlName="password" class="form-control" id="password"
+            [ngClass]="{ 'is-invalid': submitted && fe.password.errors }" />
+          <div *ngIf="submittedEdit && fe.password.errors" class="invalid-feedback">
+            <div *ngIf="fe.password.errors.required">Password is required</div>
           </div>
         </div>
 

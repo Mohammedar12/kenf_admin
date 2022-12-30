@@ -75,6 +75,7 @@ export class CouponsComponent implements OnInit {
     this.setserv.getCoupon().subscribe(val => this.sharedDataService.changeTable(val));
     this.newForm = this.formBuilder.group({
       user: ['', [Validators.required]],
+      password: ['', [Validators.required]],
       code: ['', [Validators.required]],
       discount_type: ['percent', [Validators.required]],
       discount: ['', [Validators.required]],
@@ -90,6 +91,7 @@ export class CouponsComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       id: [{ value: '', disabled: true }, [Validators.required]],
       user: ['', [Validators.required]],
+      password: [''],
       code: ['', [Validators.required]],
       discount_type: ['percent', [Validators.required]],
       discount: ['', [Validators.required]],
@@ -133,6 +135,7 @@ export class CouponsComponent implements OnInit {
       console.log(newTable[0].included_category);
       this.editForm.controls['id'].setValue(newTable[0].id);
       this.editForm.controls['user'].setValue(newTable[0].user);
+      this.editForm.controls['password'].setValue("");
       this.editForm.controls['code'].setValue(newTable[0].code);
       this.editForm.controls['discount'].setValue(newTable[0].discount);
       this.editForm.controls['discount_type'].setValue(newTable[0].discount_type);
@@ -202,6 +205,7 @@ export class CouponsComponent implements OnInit {
         this.setserv.updateCoupon({...this.newForm.value}).subscribe(data => {
           this.tableData.push({ id: data.id,
                                 user: data.user,
+                                password: data.password,
                                 code: data.code,
                                 discount_type: data.discount_type,
                                 discount: data.discount,
@@ -230,11 +234,11 @@ export class CouponsComponent implements OnInit {
       } else {
         let post_data = this.editForm.getRawValue();
         this.setserv.updateCoupon({...post_data, discount_type: this.discountType, profit_type: this.profitType}).subscribe(data => {
-          console.log(post_data);
           let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
           this.tableData[findIndex] = {
                                         id: post_data.id,
                                         user: post_data.user,
+                                        password: post_data.password,
                                         code: post_data.code,
                                         discount_type: post_data.discount_type,
                                         discount: post_data.discount,

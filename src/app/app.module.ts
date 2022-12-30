@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common
 
 import { environment } from '../environments/environment';
 
-import { NgbDatepickerModule , NgbNavModule, NgbAccordionModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule , NgbNavModule, NgbAccordionModule, NgbTooltipModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
@@ -28,7 +28,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { SettingsService } from './core/services/settings.service';
 import { MarketingService } from './core/services/marketing.service';
 import { CustomerService } from './core/services/customer.service';
-
 
 if (environment.defaultauth === 'firebase') {
   initFirebaseBackend(environment.firebaseConfig);
@@ -68,7 +67,8 @@ export function createTranslateLoader(http: HttpClient): any {
     NgbTooltipModule,
     NgbDatepickerModule,
     SharedModule,
-    ScrollToModule.forRoot()
+    ScrollToModule.forRoot(),
+    NgbModule,
   ],
   bootstrap: [AppComponent],
   providers: [
