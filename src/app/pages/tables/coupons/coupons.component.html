@@ -90,7 +90,7 @@
                         <i class="mdi mdi-dots-vertical dropdown-toggle" ngbDropdownToggle data-toggle="dropdown"
                           aria-expanded="true"></i>
                         <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                          <a class="dropdown-item"><i class="fas fa-eye"></i>Show</a>
+                          <a class="dropdown-item" (click)="openView(viewContent,table.id)"><i class="fas fa-eye"></i>Show</a>
                           <a class="dropdown-item" (click)="openEdit(editContent, table.id)"><i class="mdi mdi-account-edit"></i>Edit</a>
                           <a class="dropdown-item" (click)="deleteGroupItem(table.id)"><i class="mdi mdi-delete"></i>delete</a>
                         </div>
@@ -440,6 +440,40 @@
     <div class="modal-footer">
       <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
       <input class="btn btn-primary" type="submit" form="editForm" value="Save"/>
+
+    </div>
+  </ng-template>
+
+  <ng-template #viewContent role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title mt-0">View Coupon Stats</h5>
+      <button type="button" class="close" aria-hidden="true" (click)="modal.dismiss('Cross click')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-horizontal">
+        <div class="row" *ngIf="loadingStats === true">
+          <div class="col-12">
+            <div class="text-center my-3">
+              <div class="text-success"><i
+                  class="bx bx-loader bx-spin font-size-18 align-middle mr-2"></i> Loading</div>
+            </div>
+          </div> <!-- end col-->
+        </div>
+        <div class="row" *ngIf="loadingStats !== true">
+          <div class="col-12">
+            <label>Number Of Usage: </label>&nbsp;{{ salesStats.count }}
+          </div>
+          <div class="col-12">
+            <label>Profit: </label>&nbsp;{{ salesStats.profit }}
+          </div>
+          <div class="col-12">
+            <label>Coupon Sales: </label>&nbsp;{{ salesStats.sales }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
 
     </div>
   </ng-template>

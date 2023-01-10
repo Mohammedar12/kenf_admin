@@ -29,6 +29,8 @@ export class CouponsComponent implements OnInit {
   // Table data
   tableData: any[];
   public selected: any;
+  loadingStats: boolean;
+  salesStats: any;
   hideme: boolean[] = [];
   tables$: Observable<Coupon[]>;
   total$: Observable<number>;
@@ -156,6 +158,21 @@ export class CouponsComponent implements OnInit {
         console.log(`Dismissed ${this.getDismissReason(reason)}`);
       });
     }
+    openView(content, id) {
+      this.loadingStats = true;
+      this.setserv.getCouponAdminStats(id).subscribe(data => {
+        this.loadingStats = false;
+        this.salesStats = data;
+        console.log(data);
+      });
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+        console.log(`Closed with: ${result}`);
+      }, (reason) => {
+        this.editForm.reset();
+        console.log(`Dismissed ${this.getDismissReason(reason)}`);
+      });
+    }
+
     private getDismissReason(reason: any): string {
       if (reason === ModalDismissReasons.ESC) {
         return 'by pressing ESC';

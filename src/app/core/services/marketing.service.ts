@@ -135,5 +135,8 @@ export class MarketingService {
   updateCoupon(sysInfo): Observable<any> {
     return this.http.post(environment.backend + `/market/coupon`, sysInfo, this.httpOptions);
   }
-
+  
+  getCouponAdminStats(id){
+    return this.http.get<any>(environment.backend + `/market/coupon/stats/admin?id=${id}`, this.httpOptions);
+  }
 }
