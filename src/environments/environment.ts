@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   defaultauth: 'firebase',
   backend: 'http://104.248.239.195/api',
   // backend: 'http://localhost:4000/api',
