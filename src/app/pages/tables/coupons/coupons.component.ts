@@ -163,7 +163,6 @@ export class CouponsComponent implements OnInit {
       this.setserv.getCouponAdminStats(id).subscribe(data => {
         this.loadingStats = false;
         this.salesStats = data;
-        console.log(data);
       });
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
         console.log(`Closed with: ${result}`);

@@ -459,15 +459,18 @@
             </div>
           </div> <!-- end col-->
         </div>
-        <div class="row" *ngIf="loadingStats !== true">
-          <div class="col-12">
-            <label>Number Of Usage: </label>&nbsp;{{ salesStats.count }}
+        <div class="d-flex flex-row px-2 justify-content-between" style="gap: 10px;" *ngIf="loadingStats !== true">
+          <div class="text-center">
+            <div class="p-0 m-0"><label>Number Of Usage</label></div>
+            <div class="p-0 m-0">{{ salesStats.count }}</div>
           </div>
-          <div class="col-12">
-            <label>Profit: </label>&nbsp;{{ salesStats.profit }}
+          <div class="text-center">
+            <div class="p-0 m-0"><label>Profit</label></div>
+            <div class="p-0 m-0">{{ salesStats.profit }}</div>
           </div>
-          <div class="col-12">
-            <label>Coupon Sales: </label>&nbsp;{{ salesStats.sales }}
+          <div class="text-center">
+            <div class="p-0 m-0"><label>Coupon Sales</label></div>
+            <div class="p-0 m-0">{{ salesStats.sales }}</div>
           </div>
         </div>
       </div>
