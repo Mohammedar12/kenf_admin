@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../../../core/models/product.models';
+import { paginatedProducts } from '../../../core/models/product.models';
 import { Options } from 'ng5-slider';
 import { HttpClient } from '@angular/common/http';
 import { MarketingService } from '../../../core/services/marketing.service';
@@ -47,9 +47,19 @@ export class ProductsComponent implements OnInit {
   error = '';
 
   discountRates: number[] = [];
-  public products: any[] = [];
+  public products: paginatedProducts;
+  loading = false;
+  page = 1;
+  totalItems = 0;
+
   items_category: any[] = [];// public productTemp: productModel[] = [];
   items_group: any[] = [];
+
+  appliedShops: any[] = [];
+  appliedItems_category: any[] = [];
+  appliedItems_group: any[] = [];
+  appliedSearch: string;
+
   constructor(private modalService: NgbModal,
     private _fb: FormBuilder,
     private route: ActivatedRoute,
@@ -71,16 +81,13 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'Products' }, { label: 'All Products', active: true }];
 
-    this.marketingService.getProducts().subscribe(val => {
-      this.products = val;
-    });
+    this.navigateToPage(1);
   }
 
   openModal(content, id) {
-    console.log(id)
     this.selectedId = id;
-    let product = this.products.filter(data => data.id == id)[0];
-    let index = this.products.indexOf(product);
+    let product = this.products.docs.filter(data => data.id == id)[0];
+    let index = this.products.docs.indexOf(product);
 
     let shopAbbreviation = product.shop_id.app_abbreviation;
     let groupAbbreviation = product.group_id.abbreviation;
@@ -140,10 +147,11 @@ export class ProductsComponent implements OnInit {
 
   apply() {
     if (this.querry.categories.length == 0 && this.querry.categories.length == 0 && this.querry.categories.length == 0 && this.filterChanged) {
-      this.marketingService.getProducts().subscribe(val => {
-        this.products = val;
-        this.filterChanged = false;
-      });
+      this.appliedShops = [];
+      this.appliedItems_category = [];
+      this.appliedItems_group = [];
+      this.navigateToPage(1);
+      this.filterChanged = false;
     } else {
       if (this.querry.categories.length == 0) {
         let all_categories = [];
@@ -165,20 +173,19 @@ export class ProductsComponent implements OnInit {
           all_shops.push(element.id);
         });
         this.form.controls.shops.setValue(all_shops);
-
       }
-      this.marketingService.getFiltredProducts(this.form.value).subscribe(val => {
-        this.products = val;
-        this.filterChanged = true;
-      });
+      this.appliedShops = this.form.value.shops;
+      this.appliedItems_category = this.form.value.categories;
+      this.appliedItems_group = this.form.value.groups;
+
+      this.navigateToPage(1);
+      this.filterChanged = true;
     }
   }
 
   searchFilter(e) {
-    const searchStr = e.target.value;
-    this.products = this.products.filter((product) => {
-      return product.name_en.toLowerCase().search(searchStr.toLowerCase()) !== -1;
-    });
+    this.appliedSearch = e.target.value.trim();
+    this.navigateToPage(1);
   }
 
   editItem(id) {
@@ -188,14 +195,13 @@ export class ProductsComponent implements OnInit {
   hideItem(id, hidden) {
     this.marketingService.hideProduct({id: id, hide: hidden}).subscribe(data => {
       console.log('the product is hidden' + id);
-      this.products.filter(item => item.id === id)[0].hidden = !hidden;
+      this.products.docs.filter(item => item.id === id)[0].hidden = !hidden;
     });
   }
 
   deleteGroupItem(id) {
     this.marketingService.delProduct(id).subscribe(data => {
-      this.products = this.products.filter(data => data.id != id);
-
+    this.navigateToPage(this.page);
       // this.sharedDataService.changeTable(newTable);
       // modal.close();
       // this.newForm.reset();
@@ -209,5 +215,15 @@ export class ProductsComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  navigateToPage(nextPage){
+    this.loading = true;
+    this.marketingService.getProducts(nextPage,this.appliedShops,this.appliedItems_category,this.appliedItems_group,this.appliedSearch).subscribe(products => {
+      this.products = products;
+      this.page = products.page;
+      this.totalItems = products.totalDocs;
+      this.loading = false;
+    })
   }
 }

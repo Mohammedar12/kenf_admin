@@ -12576,8 +12576,26 @@
           }
         }, {
           key: "getProducts",
-          value: function getProducts() {
-            return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].backend + "/product", this.httpOptions);
+          value: function getProducts(page, shopIds, categoryIds, groupIds, search) {
+            var query = "page=".concat(page, "&limit=10");
+
+            if (shopIds && shopIds != null && shopIds.length != 0) {
+              query = query + "&shops=".concat(JSON.stringify(shopIds));
+            }
+
+            if (categoryIds && categoryIds != null && categoryIds.length != 0) {
+              query = query + "&categories=".concat(JSON.stringify(categoryIds));
+            }
+
+            if (groupIds && groupIds != null && groupIds.length != 0) {
+              query = query + "&groups=".concat(JSON.stringify(groupIds));
+            }
+
+            if (search && search != null && search.trim().length != 0) {
+              query = query + "&search=".concat(search);
+            }
+
+            return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].backend + "/product/admin?" + query, this.httpOptions);
           }
         }, {
           key: "generateBarcode",

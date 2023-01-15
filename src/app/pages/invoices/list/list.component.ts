@@ -35,7 +35,6 @@ export class ListComponent implements OnInit {
   }
 
   navigateToPage(nextPage){
-    console.log(nextPage);
     this.loading = true;
     this.setserv.getInvoices(nextPage).subscribe(invoices => {
       this.listData = invoices;

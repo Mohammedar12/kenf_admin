@@ -21,6 +21,7 @@ import { ProductdetailComponent } from './productdetail/productdetail.component'
 import { EditproductComponent } from './editproduct/editproduct.component';
 
 import { QRCodeModule } from 'angularx-qrcode';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 const config: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -46,7 +47,8 @@ const config: DropzoneConfigInterface = {
     Ng5SliderModule,
     NgSelectModule,
     NgbPaginationModule,
-    QRCodeModule
+    QRCodeModule,
+    NgxPaginationModule
   ],
   providers: [
     {

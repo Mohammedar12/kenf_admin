@@ -31,7 +31,22 @@ export class Product {
   ringSize: number;
   images: any[];
   isExclusive: boolean;
+  hidden: boolean;
 }
+
+export interface paginatedProducts {
+  docs: Product[],
+  totalDocs: number,
+  limit: number,
+  page: number,
+  totalPages: number,
+  hasNextPage: boolean,
+  nextPage: string,
+  hasPrevPage: boolean,
+  prevPage: string,
+  pagingCounter: number
+}
+
 
 // tslint:disable-next-line: class-name
 export class filterObject {

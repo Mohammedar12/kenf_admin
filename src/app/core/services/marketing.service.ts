@@ -11,7 +11,7 @@ import { paginatedInvoices } from '../models/invoice_item.models';
 import { Seller } from '../models/seller.models';
 import { Shop } from '../models/shop.models';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
-import { Product } from '../models/product.models';
+import { Product, paginatedProducts } from '../models/product.models';
 import { InvoiceDetail } from '../models/invoice_detail';
  
 import { AuthfakeauthenticationService } from './authfake.service';
@@ -63,8 +63,21 @@ export class MarketingService {
   getFiltredProducts(querry) {
     return this.http.post<any[]>(environment.backend + `/product/filter`, querry, this.httpOptions);
   }
-  getProducts() {
-    return this.http.get<Product[]>(environment.backend + `/product`, this.httpOptions);
+  getProducts(page,shopIds,categoryIds,groupIds,search) {
+    let query = `page=${page}&limit=10`;
+    if(shopIds && shopIds != null && shopIds.length !=0 ){
+      query = query + `&shops=${JSON.stringify(shopIds)}`;
+    }
+    if(categoryIds && categoryIds != null && categoryIds.length !=0 ){
+      query = query + `&categories=${JSON.stringify(categoryIds)}`;
+    }
+    if(groupIds && groupIds != null && groupIds.length !=0 ){
+      query = query + `&groups=${JSON.stringify(groupIds)}`;
+    }
+    if(search && search != null && search.trim().length !=0 ){
+      query = query + `&search=${search}`;
+    }
+    return this.http.get<paginatedProducts>(environment.backend + `/product/admin?` + query , this.httpOptions);
   }
   generateBarcode(sysInfo): Observable<any> {
     return this.http.post(environment.backend + `/product/generateBarcode`, sysInfo, this.httpOptions);

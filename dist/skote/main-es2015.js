@@ -7101,8 +7101,21 @@ class MarketingService {
     getFiltredProducts(querry) {
         return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].backend + `/product/filter`, querry, this.httpOptions);
     }
-    getProducts() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].backend + `/product`, this.httpOptions);
+    getProducts(page, shopIds, categoryIds, groupIds, search) {
+        let query = `page=${page}&limit=10`;
+        if (shopIds && shopIds != null && shopIds.length != 0) {
+            query = query + `&shops=${JSON.stringify(shopIds)}`;
+        }
+        if (categoryIds && categoryIds != null && categoryIds.length != 0) {
+            query = query + `&categories=${JSON.stringify(categoryIds)}`;
+        }
+        if (groupIds && groupIds != null && groupIds.length != 0) {
+            query = query + `&groups=${JSON.stringify(groupIds)}`;
+        }
+        if (search && search != null && search.trim().length != 0) {
+            query = query + `&search=${search}`;
+        }
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].backend + `/product/admin?` + query, this.httpOptions);
     }
     generateBarcode(sysInfo) {
         return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].backend + `/product/generateBarcode`, sysInfo, this.httpOptions);
