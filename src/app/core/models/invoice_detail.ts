@@ -19,5 +19,11 @@ export interface InvoiceDetail {
     price: number;
     discountValue: number;
     shippingPrice: number;
-    products: [Product]
+    products: [Product];
+    tax: number;
+    qrCode: string;
+    shipping_id: {
+        company: string;
+        time: string;
+    }
 }

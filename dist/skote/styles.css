@@ -25019,6 +25019,26 @@ aw-wizard .steps-indicator .current .step-indicator {
   color: #556ee6 !important;
   border-color: #556ee6 !important;
 }
+.menu_list {
+  list-style-type: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.menu_list li {
+  width: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #c4c4c4;
+  font-size: 12px;
+  cursor: pointer;
+  margin: 0;
+}
+.menu_list li:hover {
+  background-color: #c4c4c4;
+}
 @charset "UTF-8";
 /*
 Template Name: Skote - Responsive Bootstrap 4 Admin Dashboard

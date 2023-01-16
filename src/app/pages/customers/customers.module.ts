@@ -16,6 +16,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { CustomersComponent } from './customers.component';
 import { OrdersComponent } from './orders/orders.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 const config: DropzoneConfigInterface = {
@@ -42,7 +43,8 @@ const config: DropzoneConfigInterface = {
     Ng5SliderModule,
     NgSelectModule,
     NgbPaginationModule,
-    QRCodeModule
+    QRCodeModule,
+    NgbModule
   ],
   providers: [
     {

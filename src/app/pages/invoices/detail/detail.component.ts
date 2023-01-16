@@ -26,8 +26,19 @@ export class DetailComponent implements OnInit {
     let id = this.route.snapshot.params['id'];
     this.loading = true;
     this.setserv.getInvoiceById(id).subscribe(invoices => {
-      console.log(invoices);
       this.invoiceDetail = invoices;
+      let dateFormatter = new Intl.DateTimeFormat("en-GB", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+      this.invoiceDetail.qrCode = btoa(JSON.stringify({
+        name: "KENF",
+        date: dateFormatter.format(new Date(this.invoiceDetail.createdAt)),
+        invoice: this.invoiceDetail.totalPrice,
+        tax: this.invoiceDetail.tax
+      }));
+      console.log(this.invoiceDetail);
       this.loading = false;
     })
  }

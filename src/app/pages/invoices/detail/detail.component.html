@@ -12,8 +12,9 @@
         <div class="card-body">
           <div class="invoice-title">
             <h4 class="float-right font-size-16">Order #{{ invoiceDetail.order_id }}</h4>
-            <div class="mb-4">
-              <img src="assets/images/logo-dark.png" alt="logo" height="20" />
+            <div class="mb-4" style="display: flex;justify-content: space-between;width: 50%;">
+              <strong>#jsJHSBFJ32b423jhrbb</strong>
+              <img src="/assets/images/logo.png" style="width: 85px"/>
             </div>
           </div>
           <hr>
@@ -41,11 +42,15 @@
             <div class="col-6 mt-3">
               <address>
                 <strong></strong><br>
-                <br>
-                {{ invoiceDetail.deliveryInfo.email }}
+                <b>Email: </b>{{ invoiceDetail.customer_id.billingAddress.email }}<br>
+                <b>Phone: </b>{{ invoiceDetail.customer_id.billingAddress.phone }}
               </address>
             </div>
             <div class="col-6 mt-3 text-right">
+              <strong>Shipping Company: </strong><br>
+              {{ invoiceDetail.shipping_id.company }}<br>
+              <strong>Shipping Time: </strong><br>
+              {{ invoiceDetail.shipping_id.time }}<br>
               <address>
                 <strong>Order Date:</strong><br>
                 {{ invoiceDetail.createdAt | date: 'longDate' }}<br><br>
@@ -71,26 +76,39 @@
                   <td class="text-right">SAR {{ product.extra_price }}</td>
                 </tr>
 
-
                 <tr>
-                  <td colspan="2" class="text-right">Sub Total</td>
-                  <td class="text-right">SAR {{ invoiceDetail.price }}</td>
-                </tr>
-                <tr >
-                  <td colspan="2" class="border-0 text-right">
-                    <strong>Discount</strong></td>
-                  <td class="border-0 text-right">{{ invoiceDetail.discountValue }}</td>
-                </tr>
-                <tr>
-                  <td colspan="2" class="border-0 text-right">
-                    <strong>Shipping</strong></td>
-                  <td class="border-0 text-right">{{ invoiceDetail.shippingPrice }}</td>
-                </tr>
-                <tr>
-                  <td colspan="2" class="border-0 text-right">
-                    <strong>Total</strong></td>
-                  <td class="border-0 text-right">
-                    <h4 class="m-0">SAR {{ invoiceDetail.totalPrice }}</h4>
+                  <td colspan="2">
+                    <qrcode [qrdata]="invoiceDetail.qrCode" [width]="150" [errorCorrectionLevel]="'M'"></qrcode>
+                  </td>
+                  <td>
+                    <table style="width: 100%;">
+                      <tr>
+                        <td colspan="2" class="text-right">Sub Total</td>
+                        <td class="text-right">SAR {{ invoiceDetail.price }}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="border-0 text-right">
+                          <strong>Discount</strong></td>
+                        <td class="border-0 text-right">{{ invoiceDetail.discountValue }}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="border-0 text-right">
+                          <strong>Tax</strong></td>
+                        <td class="border-0 text-right">{{ invoiceDetail.tax }}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="border-0 text-right">
+                          <strong>Shipping</strong></td>
+                        <td class="border-0 text-right">{{ invoiceDetail.shippingPrice }}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="border-0 text-right">
+                          <strong>Total</strong></td>
+                        <td class="border-0 text-right">
+                          <h4 class="m-0">SAR {{ invoiceDetail.totalPrice }}</h4>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </tbody>

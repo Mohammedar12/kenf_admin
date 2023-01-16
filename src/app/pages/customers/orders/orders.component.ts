@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MarketingService } from '../../../core/services/marketing.service';
 import { CustomerService } from '../../../core/services/customer.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
@@ -32,7 +32,6 @@ export class OrdersComponent implements OnInit {
   selectedProductTitle = "";
   selectedProductPrice = "";
   selectedProductImage = "";
-
   constructor(private customerService: CustomerService, private modalService: NgbModal, private formBuilder: FormBuilder, private marketingService: MarketingService) {}
 
   ngOnInit() {
@@ -127,5 +126,18 @@ export class OrdersComponent implements OnInit {
     this.customerService.delOrders(id).subscribe(data => {
         this.transactions = this.transactions.filter(item => item._id != id);
     })
+  }
+
+  changeOrderStatus(order_id, status) {
+    console.log(order_id,status);
+    this.customerService.updateOrder({ order_id: order_id, status }).subscribe(data => {
+      this.transactions = this.transactions.map(item => {
+        if (item.order_id == order_id) {
+          item.status = status;
+        }
+        return item;
+      });
+    })
+    
   }
 }

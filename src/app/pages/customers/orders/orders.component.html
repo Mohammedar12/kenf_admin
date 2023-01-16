@@ -50,7 +50,19 @@
                   <td>{{data.price}}</td>
                   <td>{{data.createdAt | date:'dd/LL/YYYY' }}</td>
                   <td>
-                    <span class="badge badge-pill badge-soft-success font-size-12" [ngClass]=" { 'badge-soft-danger': data.status === 'REJECTED' || data.status === 'CANCELED', 'badge-soft-warning':data.status === 'SHIPPED' || data.status === 'DELIVERED', 'badge-soft-info': data.status === 'WAITING' }">{{data.status}}</span>
+                    <button [animation]="true" [ngbPopover]="popOver" [popoverTitle]="popTitle" class="badge badge-pill badge-soft-success font-size-12" [ngClass]=" { 'badge-soft-danger': data.status === 'REJECTED' || data.status === 'CANCELED', 'badge-soft-warning':data.status === 'SHIPPED' || data.status === 'DELIVERED', 'badge-soft-info': data.status === 'WAITING' }">{{data.status}}</button>
+                    <ng-template #popOver>
+                      <ul class="menu_list">
+                        <li (click)="changeOrderStatus(data.order_id,'WAITING')">WAITING</li>
+                        <li (click)="changeOrderStatus(data.order_id,'SHIPPED')">SHIPPED</li>
+                        <li (click)="changeOrderStatus(data.order_id,'PREPARED')">PREPARED</li>
+                        <li (click)="changeOrderStatus(data.order_id,'HAND_OVERED')">HAND_OVERED</li>
+                        <li (click)="changeOrderStatus(data.order_id,'DELIVERED')">DELIVERED</li>
+                        <li (click)="changeOrderStatus(data.order_id,'REJECTED')">REJECTED</li>
+                        <li (click)="changeOrderStatus(data.order_id,'CANCELED')">CANCELED</li>
+                        <li (click)="changeOrderStatus(data.order_id,'ACCEPTED')">ACCEPTED</li>
+                      </ul>
+                    </ng-template>
                     <!-- <ng-select *ngIf="change_badge" [items]="order_status" style="width: 150px;" [appendTo]="'body'" [(ngModel)]="selectedStatus"></ng-select> -->
                   </td>
                   <td>
@@ -75,9 +87,12 @@
     </div>
   </div>
 
+  
   <!-- end table -->
   
 </div>
+
+<ng-template #popTitle><b>Change Status</b></ng-template>
 
 <ng-template #editContent role="document" let-modal>
   <div class="modal-header">

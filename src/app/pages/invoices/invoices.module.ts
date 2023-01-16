@@ -8,6 +8,7 @@ import { UIModule } from '../../shared/ui/ui.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [ListComponent, DetailComponent],
@@ -16,7 +17,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     InvoicesRoutingModule,
     UIModule,
     NgbTooltipModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    QRCodeModule
   ]
 })
 export class InvoicesModule { }
