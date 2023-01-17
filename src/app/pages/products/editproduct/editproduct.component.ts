@@ -45,11 +45,13 @@ export class EditproductComponent implements OnInit {
   items_color: any[] = [];
   show_ringsize: boolean = false;
   customersData: Product;
+  mainImage: string;
+
   constructor(private route: ActivatedRoute,private router: Router, public formBuilder: FormBuilder, private http: HttpClient, private setserv: MarketingService, private setservv: SettingsService) {
     this.config = setserv.getUploadConfig();
     console.log(this.config);
     this.customersData = this.route.snapshot.data.product;
-
+    this.mainImage = this.customersData.mainImage;
     this.show_ringsize = this.customersData.category_id.id <= 2 ? true : false;
     console.log('!!!!!!', this.customersData)
     let shops = this.route.snapshot.data.shops;
@@ -109,6 +111,7 @@ export class EditproductComponent implements OnInit {
       color: [this.customersData.color, [Validators.required]],
       images: [this.customersData.images, [Validators.required]],
       isExclusive: [this.customersData.isExclusive, [Validators.required]],
+      mainImage: [this.customersData.mainImage, []],
     });
   }
   onShowSizeOfRing(event) {
@@ -126,8 +129,10 @@ export class EditproductComponent implements OnInit {
   }
   onUploadError(event){
     console.log(event);
-
-
+  }
+  onMainImageSelect(file){
+    this.mainImage = file;
+    this.productForm.controls.mainImage.setValue(file);
   }
   onUploadSuccess(event){
     // event[2].srcElement.then(response => response.json()).then(data => console.log(data)).catch(err => console.log(err));

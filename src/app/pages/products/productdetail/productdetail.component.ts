@@ -20,6 +20,20 @@ export class ProductdetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {
     this.productDetail = this.route.snapshot.data.product;
+    if(this.productDetail.mainImage){
+      let mainImageIndex = -1;
+      for(let i=0;i<this.productDetail.images.length;i++){
+        if(this.productDetail.images[i].id == this.productDetail.mainImage){
+          mainImageIndex = i;
+          break;
+        }
+      }
+      if(mainImageIndex>=0){
+        let itemToFind = this.productDetail.images[mainImageIndex];
+        this.productDetail.images.splice(mainImageIndex, 1);
+        this.productDetail.images.unshift(itemToFind);
+      }
+    }
     console.log(this.productDetail);
 
   }

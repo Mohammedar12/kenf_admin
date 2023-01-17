@@ -32,6 +32,7 @@ export class Product {
   images: any[];
   isExclusive: boolean;
   hidden: boolean;
+  mainImage: string;
 }
 
 export interface paginatedProducts {

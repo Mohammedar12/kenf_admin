@@ -66,6 +66,8 @@
                 <tr>
                   <th style="width: 70px;">No.</th>
                   <th>Item</th>
+                  <th>Purity (Karats)</th>
+                  <th>Weight</th>
                   <th class="text-right">Price</th>
                 </tr>
               </thead>
@@ -73,11 +75,13 @@
                 <tr *ngFor="let product of invoiceDetail.products; let i = index">
                   <td>{{ i + 1 }}</td>
                   <td>{{ product.description_en }}</td>
+                  <td>{{ product.purity_id[0].name_en }}</td>
+                  <td>{{ product.weight }}</td>
                   <td class="text-right">SAR {{ product.extra_price }}</td>
                 </tr>
 
                 <tr>
-                  <td colspan="2">
+                  <td colspan="4">
                     <qrcode [qrdata]="invoiceDetail.qrCode" [width]="150" [errorCorrectionLevel]="'M'"></qrcode>
                   </td>
                   <td>

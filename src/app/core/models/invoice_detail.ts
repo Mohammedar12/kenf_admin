@@ -25,5 +25,9 @@ export interface InvoiceDetail {
     shipping_id: {
         company: string;
         time: string;
-    }
+    },
+    purity_id: [{
+        name_ar: string;
+        name_en: string;
+    }]
 }
