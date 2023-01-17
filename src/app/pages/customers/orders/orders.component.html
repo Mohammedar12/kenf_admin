@@ -50,7 +50,7 @@
                   <td>{{data.price}}</td>
                   <td>{{data.createdAt | date:'dd/LL/YYYY' }}</td>
                   <td>
-                    <button [animation]="true" [ngbPopover]="popOver" [popoverTitle]="popTitle" class="badge badge-pill badge-soft-success font-size-12" [ngClass]=" { 'badge-soft-danger': data.status === 'REJECTED' || data.status === 'CANCELED', 'badge-soft-warning':data.status === 'SHIPPED' || data.status === 'DELIVERED', 'badge-soft-info': data.status === 'WAITING' }">{{data.status}}</button>
+                    <button style="border: none;" [animation]="true" [ngbPopover]="popOver" [popoverTitle]="popTitle" class="badge badge-pill badge-soft-success font-size-12" [ngClass]=" { 'badge-soft-danger': data.status === 'REJECTED' || data.status === 'CANCELED', 'badge-soft-warning':data.status === 'SHIPPED' || data.status === 'DELIVERED', 'badge-soft-info': data.status === 'WAITING' }">{{data.status}}</button>
                     <ng-template #popOver>
                       <ul class="menu_list">
                         <li (click)="changeOrderStatus(data.order_id,'WAITING')">WAITING</li>
