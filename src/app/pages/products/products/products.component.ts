@@ -219,7 +219,21 @@ export class ProductsComponent implements OnInit {
 
   navigateToPage(nextPage){
     this.loading = true;
-    this.marketingService.getProducts(nextPage,this.appliedShops,this.appliedItems_category,this.appliedItems_group,this.appliedSearch).subscribe(products => {
+    this.marketingService.getProducts(nextPage,this.appliedShops,this.appliedItems_category,this.appliedItems_group,this.appliedSearch).subscribe((products: paginatedProducts) => {
+      for(let i=0;i<products.docs.length;i++){
+        if(products.docs[i].mainImage && products.docs[i].mainImage != ''){
+          let mainImageIndex = -1;
+          for(let j=0;j<products.docs[i].images.length;j++){
+            if(products.docs[i].images[j].id === products.docs[i].mainImage){
+              mainImageIndex = j;
+              break;
+            }
+          }
+          if(mainImageIndex >= 0){
+            products.docs[i].images.unshift(products.docs[i].images.splice(mainImageIndex, 1)[0]);
+          }
+        }
+      }
       this.products = products;
       this.page = products.page;
       this.totalItems = products.totalDocs;
