@@ -41,11 +41,14 @@ export class EditproductComponent implements OnInit {
   items_category: any[] = [];
   kenf_category: any[] = [];
   isExclusive: boolean = false;
+  isSpecial: boolean = false;
   ringSize: any[] = [];
   items_color: any[] = [];
   show_ringsize: boolean = false;
   customersData: Product;
   mainImage: string;
+  special_locations: any[] = [];
+  special_label: string;
 
   constructor(private route: ActivatedRoute,private router: Router, public formBuilder: FormBuilder, private http: HttpClient, private setserv: MarketingService, private setservv: SettingsService) {
     this.config = setserv.getUploadConfig();
@@ -69,6 +72,7 @@ export class EditproductComponent implements OnInit {
     });
     this.setservv.getSizes().subscribe(val => {this.ringSize = val});
     this.items_color = [{name: 'Yellow'}, {name: 'White'}, {name: 'Multi'}];
+    this.special_locations = [{name: 'Category'}, {name: 'Collection'}];
   }
   get form() {
     return this.productForm.controls;
@@ -78,8 +82,6 @@ export class EditproductComponent implements OnInit {
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'Products' }, { label: 'Edit Product', active: true }];
     this.customersData.images.forEach(element => {
-      console.log(element);
-      
       this.files.push(element.id);
     });
     this.customersData.purity_id.forEach(element => {
@@ -90,6 +92,21 @@ export class EditproductComponent implements OnInit {
     });
       
     this.isExclusive = this.customersData.isExclusive;
+    this.isSpecial = this.customersData.special_cat ? true : false;
+
+    let special_loc;
+    let special_cat_id;
+    if(this.customersData.special_cat){
+      special_cat_id = this.customersData.special_cat.id;
+      if(this.customersData.special_cat.isKenf){
+        special_loc = "Collection";
+        this.special_label = this.customersData.special_cat.name_en;
+      }
+      else{
+        special_loc = "Category";
+        this.special_label = this.customersData.special_cat.name_en;
+      }
+    }
 
     this.productForm = this.formBuilder.group({
       id: [this.customersData.id, [Validators.required]],
@@ -111,17 +128,56 @@ export class EditproductComponent implements OnInit {
       color: [this.customersData.color, [Validators.required]],
       images: [this.customersData.images, [Validators.required]],
       isExclusive: [this.customersData.isExclusive, [Validators.required]],
+      isSpecial: [this.customersData.special_cat ? true : false,[]],
+      special_loc: [special_loc, []],
+      special_cat_id: [special_cat_id,[]],
       mainImage: [this.customersData.mainImage, []],
     });
   }
   onShowSizeOfRing(event) {
     this.show_ringsize = event.id <= 2 ? true : false;
+    if(this.productForm.get("special_loc").value === 'Category'){
+      this.special_label = event.name;
+      this.productForm.controls.special_cat_id.setValue(event.id);
+    }
+  }
+  onChangeCollection(event) {
+    if(this.productForm.get("special_loc").value === 'Collection'){
+      this.special_label = event.name;
+      this.productForm.controls.special_cat_id.setValue(event.id);
+    }
+  }
+  changeSepcial(event){
+    if(event.target.checked){
+      this.isSpecial = true;
+    }
+    else{
+      this.isSpecial = false;
+    }
+  }
+  changeSepcialLoc(event){
+    if(event?.name === 'Category'){
+      this.items_category.forEach((val)=>{
+        if(val.id === this.productForm.get('category_id').value){
+          this.special_label = val.name;
+          this.productForm.controls.special_cat_id.setValue(val.id);
+        }
+      });
+    } else if(event?.name === 'Collection'){
+      this.kenf_category.forEach((val)=>{
+        if(val.id === this.productForm.get('kenf_id').value){
+          this.special_label = val.name;
+          this.productForm.controls.special_cat_id.setValue(val.id);
+        }
+      });
+    } else {
+      this.special_label = "";
+      this.productForm.controls.special_cat_id.setValue(null);
+    }
   }
   onUploadInit(event) {
     console.log(event);
-
     this.submit=true;
-
   }
   onQueueComplete(event){
     this.submit = false;
@@ -155,7 +211,6 @@ export class EditproductComponent implements OnInit {
    */
    validSubmit() {
       this.submit = true;
-
       if (this.productForm.invalid) {
         return;
       } else {

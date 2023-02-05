@@ -33,6 +33,7 @@ export class Product {
   isExclusive: boolean;
   hidden: boolean;
   mainImage: string;
+  special_cat: any; 
 }
 
 export interface paginatedProducts {
