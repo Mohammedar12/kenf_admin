@@ -96,15 +96,15 @@ export class EditproductComponent implements OnInit {
 
     let special_loc;
     let special_cat_id;
-    if(this.customersData.special_cat){
-      special_cat_id = this.customersData.special_cat.id;
-      if(this.customersData.special_cat.isKenf){
+    if(this.customersData.special_cat?.category){
+      special_cat_id = this.customersData.special_cat.category.id;
+      if(this.customersData.special_cat.category.isKenf){
         special_loc = "Collection";
-        this.special_label = this.customersData.special_cat.name_en;
+        this.special_label = this.customersData.special_cat.category.name_en;
       }
       else{
         special_loc = "Category";
-        this.special_label = this.customersData.special_cat.name_en;
+        this.special_label = this.customersData.special_cat.category.name_en;
       }
     }
 
@@ -128,7 +128,7 @@ export class EditproductComponent implements OnInit {
       color: [this.customersData.color, [Validators.required]],
       images: [this.customersData.images, [Validators.required]],
       isExclusive: [this.customersData.isExclusive, [Validators.required]],
-      isSpecial: [this.customersData.special_cat ? true : false,[]],
+      isSpecial: [this.customersData.special_cat?.category ? true : false,[]],
       special_loc: [special_loc, []],
       special_cat_id: [special_cat_id,[]],
       mainImage: [this.customersData.mainImage, []],
