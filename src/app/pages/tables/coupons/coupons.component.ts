@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MarketingService } from '../../../core/services/marketing.service';
 import { SettingsService } from '../../../core/services/settings.service';
 import { Coupon } from '../../../core/models/coupon.models';
+import { Shipping } from '../../../core/models/shipping.models';
 import { SharedDataCouponService } from './data';
 import { ItemsCategory } from '../../../core/models/items_category.models';
 
@@ -43,6 +44,7 @@ export class CouponsComponent implements OnInit {
   amountType = [{ id: 'percent', name: 'Percentage' }, { id: 'fixed', name: 'fixed Amount' }]
   exceptDiscountedProduct = [true, false];
   items_category: ItemsCategory[];
+  shipping_companies: Shipping[];
   error = '';
   disableType = false;
 
@@ -71,8 +73,10 @@ export class CouponsComponent implements OnInit {
       this.tableData = tableData;
     });
     this.setservv.getItemsCategory().subscribe(category => {
-      console.log(category)
       this.items_category = category;
+    })
+    this.setservv.getShipping().subscribe(shipping => {
+      this.shipping_companies = shipping;
     })
     this.setserv.getCoupon().subscribe(val => this.sharedDataService.changeTable(val));
     this.newForm = this.formBuilder.group({
@@ -82,6 +86,7 @@ export class CouponsComponent implements OnInit {
       discount_type: ['percent', [Validators.required]],
       discount: ['', [Validators.required]],
       max_discount: [''],
+      freeShipping: [],
       profit: ['', [Validators.required]],
       profit_type: ['percent', [Validators.required]],
       total_purchase_condition: ['', [Validators.required]],
@@ -98,6 +103,7 @@ export class CouponsComponent implements OnInit {
       discount_type: ['percent', [Validators.required]],
       discount: ['', [Validators.required]],
       max_discount: [''],
+      freeShipping: [],
       profit: ['', [Validators.required]],
       profit_type: ['percent', [Validators.required]],
       total_purchase_condition: ['', [Validators.required]],
@@ -141,6 +147,7 @@ export class CouponsComponent implements OnInit {
       this.editForm.controls['code'].setValue(newTable[0].code);
       this.editForm.controls['discount'].setValue(newTable[0].discount);
       this.editForm.controls['discount_type'].setValue(newTable[0].discount_type);
+      this.editForm.controls['freeShipping'].setValue(newTable[0].freeShipping);
       this.editForm.controls['profit'].setValue(newTable[0].profit);
       this.editForm.controls['profit_type'].setValue(newTable[0].profit_type);
       this.editForm.controls['max_discount'].setValue(newTable[0].max_discount);
@@ -226,6 +233,7 @@ export class CouponsComponent implements OnInit {
                                 discount_type: data.discount_type,
                                 discount: data.discount,
                                 max_discount: data.max_discount,
+                                freeShipping: data.freeShipping,
                                 profit: data.profit,
                                 profit_type: data.profit_type,
                                 total_purchase_condition: data.total_purchase_condition,
@@ -259,6 +267,7 @@ export class CouponsComponent implements OnInit {
                                         discount_type: post_data.discount_type,
                                         discount: post_data.discount,
                                         max_discount: post_data.max_discount,
+                                        freeShipping: post_data.freeShipping,
                                         profit: post_data.profit,
                                         profit_type: post_data.profit_type,
                                         total_purchase_condition: post_data.total_purchase_condition,
