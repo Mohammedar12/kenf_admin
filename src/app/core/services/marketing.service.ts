@@ -173,7 +173,7 @@ export class MarketingService {
   }
 
   getInvoices(page) {
-    return this.http.get<paginatedInvoices>(environment.backend + `/order/invoice/list?page=${page}&limit=10`, this.httpOptions);
+    return this.http.get<paginatedInvoices>(environment.backend + `/order/invoice?page=${page}&limit=10`, this.httpOptions);
   }
 
   getInvoiceById(id) {

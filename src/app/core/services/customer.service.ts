@@ -15,9 +15,8 @@ export class CustomerService {
 
   constructor(private http: HttpClient, private authService: AuthfakeauthenticationService) {
     this.authService.currentUser.subscribe(user => {
-      this.httpOptions = { headers: new HttpHeaders({ "x-auth-token": user.token }) };
+      this.httpOptions = { withCredentials: true };
     });
-
   }
 
 
@@ -32,12 +31,13 @@ export class CustomerService {
   updateCustomer(sysInfo,id): Observable<any> {
     return this.http.put(environment.backend + `/customer/`+id, sysInfo, this.httpOptions);
   }
-
+  
   getOrders() {
     return this.http.get<any[]>(environment.backend + `/order?page=${1}&limit=${100}`, this.httpOptions).pipe( map( (response: any) => { 
       return response.data.docs; 
     }));
   }
+
   delOrders(sysInfo) {
     return this.http.delete(environment.backend + `/order/` + sysInfo, this.httpOptions);
   }

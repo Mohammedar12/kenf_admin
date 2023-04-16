@@ -36,9 +36,10 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.customerService.getOrders().subscribe(orders => {
+      console.log("vdf");
       this.transactions = orders;
       console.log(orders)
-    })
+    },err => {console.log(err)});
     this.editForm = this.formBuilder.group({
       oto_id: [''],
       // customer: ['', [Validators.required]],
