@@ -137,7 +137,7 @@ export class SizesComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateCreateSizes(this.newForm.value).subscribe(data => {
+      this.setserv.createSizes(this.newForm.value).subscribe(data => {
         console.log(data)
         this.tableData.push({ id: data.id, name_ar: data.name_ar, name_en: data.name_en, unit: data.unit, status: data.active });
         this.sharedDataService.changeTable(this.tableData);
@@ -155,7 +155,9 @@ export class SizesComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.setserv.updateCreateSizes(post_data).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateSizes(post_data,id).subscribe(data => {
         console.log(post_data);
 
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);

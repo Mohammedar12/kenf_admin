@@ -22,14 +22,14 @@ export class EditShopComponent implements OnInit {
   // Form submition
   selectedOwner: number;
   backend = environment.backend;
-
+  imageBackend = environment.imageBackend;
   config: DropzoneConfigInterface;
   image = '';
   file = '';
   customersData: Shop;
   submit: boolean = false;
   submitted: boolean = false;
-  files: number[] = [];
+  files: {id: string, link: string}[] = [];
   owners: any[] = [];
   constructor(private route: ActivatedRoute,private router: Router, public formBuilder: FormBuilder, private http: HttpClient, private setserv: MarketingService, private userService: UserProfileService) {
     this.config = setserv.getUploadConfig();
@@ -55,7 +55,7 @@ export class EditShopComponent implements OnInit {
 
     this.productForm = this.formBuilder.group({
       id: [this.customersData.id, [Validators.required]],
-      seller_id: [this.customersData.seller_id, [Validators.required]],
+      seller: [this.customersData.seller, [Validators.required]],
       app_name_ar: [this.customersData.app_name_ar, [Validators.required]],
       app_name_en: [this.customersData.app_name_en, [Validators.required]],
       app_abbreviation: [this.customersData.app_abbreviation, [Validators.required]],
@@ -85,31 +85,22 @@ export class EditShopComponent implements OnInit {
     return this.productForm.controls;
   }
   onUploadSuccess(event){
-    // event[2].srcElement.then(response => response.json()).then(data => console.log(data)).catch(err => console.log(err));
     event[0].previewElement.parentNode.removeChild(event[0].previewElement);
+    //let response = JSON.parse(event[2].srcElement.response);
+    this.files.push({id: event[1].data[0].id,link: event[1].data[0].link});
 
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
-    console.log(this.productForm.controls);
-
-    this.productForm.controls.images.setValue(this.files);
-    this.submit = false;
-
+    this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
+    this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
+  }
+  deleteImage(id) {
+      this.files = this.files.filter((val)=>val.id !== id);
+      this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
+      this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   onAccept(file: any) {
     this.image = file.name;
     this.file = file;
   }
-  /**
-   * Bootsrap validation form submit method
-   */
-   deleteImage(id) {
-     const index = this.files.indexOf(id);
-     if (index > -1) {
-       this.files.splice(index, 1); // 2nd parameter means remove one item only
-       this.productForm.controls.images.setValue(this.files);
-     }
-   }
 
   validSubmit() {
     this.submit = true;
@@ -120,7 +111,10 @@ export class EditShopComponent implements OnInit {
       return;
     } else {
       console.log(this.productForm.value)
-      this.setserv.addShop(this.productForm.value).subscribe(data => this.router.navigate(['/shops/list']));
+      let post_data = this.productForm.getRawValue();
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateShop(post_data,id).subscribe(data => this.router.navigate(['/shops/list']));
     }
   }
 }

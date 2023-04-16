@@ -27,6 +27,7 @@ import { environment } from 'src/environments/environment';
 export class ItemsgroupsComponent implements OnInit {
   // bread crum data
   backend = environment.backend;
+  imageBackend = environment.imageBackend;
   breadCrumbItems: Array<{}>;
   // Table data
   tableData: ItemsGroup[];
@@ -39,7 +40,7 @@ export class ItemsgroupsComponent implements OnInit {
   submitted = false;
   submittedEdit = false;
   error = '';
-  files: number[] = [];
+  files: {id: string, link: string}[] = [];
   config: DropzoneConfigInterface;
 
   @ViewChildren(AdvancedSortableDirective) headers: QueryList<AdvancedSortableDirective>;
@@ -110,8 +111,7 @@ export class ItemsgroupsComponent implements OnInit {
     this.files = [];
 
     let newTable = this.tableData.filter(data => data.id == id);
-    this.files = newTable[0].images.map(item => item.id);
-
+    this.files = newTable[0].images;
     this.editForm.controls['id'].setValue(newTable[0].id);
     this.editForm.controls['name_ar'].setValue(newTable[0].name_ar);
     this.editForm.controls['name_en'].setValue(newTable[0].name_en);
@@ -158,10 +158,10 @@ export class ItemsgroupsComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateCreateItemsGroup(this.newForm.value).subscribe(data => {
+      this.setserv.createItemsGroup(this.newForm.value).subscribe(data => {
         console.log('onsubmit', data)
-        this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: data.images.map(item => ({id: item}))});
-        this.sharedDataService.changeTable(this.tableData);
+        //this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: data.images.map(item => ({id: item}))});
+        //this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
         modal.close();
         this.newForm.reset();
@@ -177,7 +177,9 @@ export class ItemsgroupsComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.setserv.updateCreateItemsGroup(post_data).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateItemsGroup(post_data,id).subscribe(data => {
         console.log(post_data.images.map(item => ({id: item})));
 
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
@@ -217,19 +219,16 @@ export class ItemsgroupsComponent implements OnInit {
   }
   onUploadSuccess(event){
     event[0].previewElement.parentNode.removeChild(event[0].previewElement);
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
+    //let response = JSON.parse(event[2].srcElement.response);
+    this.files.push({id: event[1].data[0].id,link: event[1].data[0].link});
 
-    this.newForm.controls.images.setValue(this.files);
-    this.editForm.controls.images.setValue(this.files);
+    this.newForm.controls.images.setValue(this.files.map((val)=>val.id));
+    this.editForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   deleteImage(id) {
-    const index = this.files.indexOf(id);
-    if (index > -1) {
-      this.files.splice(index, 1); // 2nd parameter means remove one item only
-      this.newForm.controls.images.setValue(this.files);
-      this.editForm.controls.images.setValue(this.files);
-    }
+      this.files = this.files.filter((val)=>val.id !== id);
+      this.newForm.controls.images.setValue(this.files.map((val)=>val.id));
+      this.editForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
 
 }

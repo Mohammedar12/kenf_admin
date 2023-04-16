@@ -135,7 +135,7 @@ export class PaymentmethodComponent implements OnInit {
       if (this.newForm.invalid) {
         return;
       } else {
-        this.setserv.updateCreatePaymentMethods(this.newForm.value).subscribe(data => {
+        this.setserv.createPaymentMethods(this.newForm.value).subscribe(data => {
           this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, status: data.active});
           this.sharedDataService.changeTable(this.tableData);
           this.submitted = false;
@@ -152,7 +152,9 @@ export class PaymentmethodComponent implements OnInit {
         return;
       } else {
         let post_data = this.editForm.getRawValue();
-        this.setserv.updateCreatePaymentMethods(post_data).subscribe(data => {
+        let id = post_data.id;
+        delete post_data.id;
+        this.setserv.updatePaymentMethods(post_data,id).subscribe(data => {
           console.log(post_data);
 
           let findIndex = this.tableData.findIndex(data => data.id == post_data.id);

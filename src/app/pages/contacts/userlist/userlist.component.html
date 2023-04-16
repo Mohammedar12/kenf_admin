@@ -18,8 +18,8 @@
                   <th scope="col">Status</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr *ngFor="let user of tableData;">
+              <tbody *ngIf="listData">
+                <tr *ngFor="let user of listData | paginate: { itemsPerPage: 10, currentPage: page, totalItems: totalItems, id: 'first' }">
                   <td>
                     <div>
                       <img class="rounded-circle avatar-xs" src="assets/images/users/avatar-2.jpg" alt="">
@@ -27,7 +27,7 @@
                   </td>
                   <td>
                     <h5 class="font-size-14 mb-1"><a href="javascript: void(0);" class="text-dark">{{ user.name }}</a></h5>
-                    <p class="text-muted mb-0">Admin</p>
+                    <p class="text-muted mb-0">{{ user.role }}</p>
                   </td>
                   <td>{{ user.email }}</td>
                   <td>
@@ -79,5 +79,20 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="row" *ngIf="loading === true">
+    <div class="col-12">
+      <div class="text-center my-3">
+        <div class="text-success"><i
+            class="bx bx-loader bx-spin font-size-18 align-middle mr-2"></i> Loading</div>
+      </div>
+    </div> <!-- end col-->
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center" *ngIf="loading === false">
+    <div class="">
+      <pagination-controls (pageChange)="navigateToPage($event)" id="first"></pagination-controls>
+    </div> <!-- end col-->
   </div>
 </div>

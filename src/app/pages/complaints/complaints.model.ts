@@ -1,5 +1,5 @@
 export interface Complaints {
-    id: number;
+    id: string;
     title: string;
     name: string;
     email: string;

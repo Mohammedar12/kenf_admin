@@ -1,5 +1,5 @@
 export interface Coupon {
-    id: number;
+    id: string;
     user: string;
     code: string;
     discount_type: string;

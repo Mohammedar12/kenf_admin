@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
  */
 export class ProductdetailComponent implements OnInit {
   backend = environment.backend;
-
+  imageBackend = environment.imageBackend;
   breadCrumbItems: Array<{}>;
   public productDetail: Product;
 

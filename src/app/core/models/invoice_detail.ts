@@ -4,6 +4,7 @@ interface Product {
 export interface InvoiceDetail {
     customer_id: any;
     _id: string;
+    id: string;
     order_id: string;
     createdAt: string;
     totalPrice: number;

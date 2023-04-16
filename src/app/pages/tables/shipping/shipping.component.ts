@@ -150,7 +150,7 @@ export class ShippingComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateCreateShipping(this.newForm.value).subscribe(data => {
+      this.setserv.createShipping(this.newForm.value).subscribe(data => {
         console.log('onsubmit', data)
         this.tableData.push({id: data.id, company: data.company, price: data.price, time: data.time});
         this.sharedDataShippingService.changeTable(this.tableData);
@@ -169,8 +169,9 @@ export class ShippingComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      console.log(post_data)
-      this.setserv.updateCreateShipping(post_data).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateShipping(post_data,id).subscribe(data => {
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
         this.tableData[findIndex] = {id: post_data.id, company: post_data.company, price: post_data.price, time: post_data.time};
         this.sharedDataShippingService.changeTable(this.tableData);

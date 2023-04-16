@@ -96,7 +96,9 @@ export class CustomersComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.customerService.updateCustomer(post_data).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.customerService.updateCustomer(post_data,id).subscribe(data => {
         console.log(post_data);
 
         let findIndex = this.customersData.findIndex(data => data.id == post_data.id);

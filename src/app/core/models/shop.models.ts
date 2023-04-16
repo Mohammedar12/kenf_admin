@@ -1,6 +1,6 @@
 export class Shop {
-  id: number;
-  seller_id: number;
+  id: string;
+  seller: string;
   app_name_ar:string;
   app_name_en:string;
   app_abbreviation:string;
@@ -15,5 +15,5 @@ export class Shop {
   description_ar:string;
   description_en:string;
   commission: number;
-  images: number[];
+  images: {id: string, link: string}[];
 }

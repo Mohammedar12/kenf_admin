@@ -36,6 +36,7 @@ export class ProductsComponent implements OnInit {
   generateQrcode = "";
   selectedId: number;
   backend = environment.backend;
+  imageBackend = environment.imageBackend;
   priceoption: Options = {
     floor: 0,
     ceil: 800,
@@ -89,31 +90,29 @@ export class ProductsComponent implements OnInit {
     let product = this.products.docs.filter(data => data.id == id)[0];
     let index = this.products.docs.indexOf(product);
 
-    let shopAbbreviation = product.shop_id.app_abbreviation;
-    let groupAbbreviation = product.group_id.abbreviation;
-    let categoryAbbreviation = product.category_id.abbreviation;
-    let purity = product.purity_id[0].name_en;
+    let shopAbbreviation = product.shop?.app_abbreviation;
+    let groupAbbreviation = product.group?.abbreviation;
+    let categoryAbbreviation = product.category?.abbreviation;
+    let purity = product.purity[0].name_en;
     let zero = '000000';
 
     console.log(product)
 
     this.generateQrcode = shopAbbreviation + '-' + groupAbbreviation + categoryAbbreviation + purity + zero.substring(product.id.toString().length) + product.id;
 
-    this.marketingService.generateBarcode({id: id, barcode: this.generateQrcode}).subscribe(val => {
-      this.products[index].barcode = val.barcode;
-      this.marketingService.getBarcode(val.barcode).subscribe(image => {
-
-        this.barcodeImage = image;
+    this.marketingService.generateBarcode({barcode: this.generateQrcode},id).subscribe((responseData) => {
+      //this.products[index].barcode = this.barcodeImage;
+      this.barcodeImage = this.generateQrcode;
         this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
           console.log(`Closed with: ${result}`);
         }, (reason) => {
           console.log(`Dismissed ${this.getDismissReason(reason)}`);
         });
-      });
     });
   }
 
   onChange(event) {
+    this.querry.shops = []; 
     event.forEach(element => {
       this.querry.shops.push(element.id)
     });
@@ -146,41 +145,11 @@ export class ProductsComponent implements OnInit {
   }
 
   apply() {
-    if (this.querry.categories.length == 0 && this.querry.categories.length == 0 && this.querry.categories.length == 0 && this.filterChanged) {
-      this.appliedShops = [];
-      this.appliedItems_category = [];
-      this.appliedItems_group = [];
-      this.navigateToPage(1);
-      this.filterChanged = false;
-    } else {
-      if (this.querry.categories.length == 0) {
-        let all_categories = [];
-        this.items_category.forEach(element => {
-          all_categories.push(element.id);
-        });
-        this.form.controls.categories.setValue(all_categories);
-      }
-      if (this.querry.groups.length == 0) {
-        let all_groups = [];
-        this.items_group.forEach(element => {
-          all_groups.push(element.id);
-        });
-        this.form.controls.groups.setValue(all_groups);
-      }
-      if (this.querry.shops.length == 0) {
-        let all_shops = [];
-        this.shops.forEach(element => {
-          all_shops.push(element.id);
-        });
-        this.form.controls.shops.setValue(all_shops);
-      }
-      this.appliedShops = this.form.value.shops;
-      this.appliedItems_category = this.form.value.categories;
-      this.appliedItems_group = this.form.value.groups;
+    this.appliedShops = this.form.value.shops;
+    this.appliedItems_category = this.form.value.categories;
+    this.appliedItems_group = this.form.value.groups;
 
-      this.navigateToPage(1);
-      this.filterChanged = true;
-    }
+    this.navigateToPage(1);
   }
 
   searchFilter(e) {
@@ -221,7 +190,7 @@ export class ProductsComponent implements OnInit {
     this.loading = true;
     this.marketingService.getProducts(nextPage,this.appliedShops,this.appliedItems_category,this.appliedItems_group,this.appliedSearch).subscribe((products: paginatedProducts) => {
       for(let i=0;i<products.docs.length;i++){
-        if(products.docs[i].mainImage && products.docs[i].mainImage != ''){
+        if(products.docs[i].mainImage && products.docs[i].mainImage?.id){
           let mainImageIndex = -1;
           for(let j=0;j<products.docs[i].images.length;j++){
             if(products.docs[i].images[j].id === products.docs[i].mainImage){

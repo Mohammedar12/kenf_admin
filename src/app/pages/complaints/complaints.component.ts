@@ -20,6 +20,7 @@ import { customersData } from './data';
 export class ComplaintsComponent implements OnInit {
 
   backend = environment.backend;
+  imageBackend = environment.imageBackend;
   // bread crumb items
   breadCrumbItems: Array<{}>;
 
@@ -70,7 +71,7 @@ export class ComplaintsComponent implements OnInit {
     this.editForm.controls['title'].setValue(newTable[0].title);
     this.editForm.controls['complaints'].setValue(newTable[0].complaints);
 
-    this.file = newTable[0].images.id;
+    this.file = newTable[0].images;
     this.modalTitle = newTable[0].title;
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -104,14 +105,11 @@ export class ComplaintsComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      console.log('send answer', post_data)
-      this.customerService.sendAnswer(post_data).subscribe(data => {
-        console.log(data)
-        console.log(post_data); 
-
+      let id = post_data.id;
+      delete post_data.id;
+      this.customerService.sendAnswer(post_data,id).subscribe(data => {
         let findIndex = this.customersData.findIndex(data => data.id == post_data.id);
         this.customersData[findIndex] = post_data;
-        // this.sharedDataService.changeTable(this.customersData);
         this.submitted = false;
         modal.close();
       });

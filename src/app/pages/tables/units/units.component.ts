@@ -138,7 +138,7 @@ export class UnitsComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateCreateUnits(this.newForm.value).subscribe(data => {
+      this.setserv.createUnits(this.newForm.value).subscribe(data => {
         this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, status: data.active});
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
@@ -155,7 +155,9 @@ export class UnitsComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.setserv.updateCreateUnits(post_data).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateUnits(post_data,id).subscribe(data => {
         console.log(post_data);
 
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);

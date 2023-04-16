@@ -44,7 +44,7 @@ function sort(tables: PaymentMethods[], column: string, direction: string): Paym
 function matches(tables: PaymentMethods, term: string, pipe: PipeTransform) {
   return tables.name_ar.toLowerCase().includes(term.toLowerCase())
       || tables.name_en.toLowerCase().includes(term)
-      || tables.id == parseInt(term)
+      || tables.id == term
       || tables.status.toLowerCase().includes(term);
 }
 

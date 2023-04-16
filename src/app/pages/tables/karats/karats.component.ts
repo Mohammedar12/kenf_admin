@@ -134,7 +134,7 @@ export class KaratsComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateCreateKarats(this.newForm.value).subscribe(data => {
+      this.setserv.createKarats(this.newForm.value).subscribe(data => {
         this.tableData.push({ id: data.id, name_ar: data.name_ar, name_en: data.name_en, status: data.active });
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
@@ -151,7 +151,9 @@ export class KaratsComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.setserv.updateCreateKarats(post_data).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updatKarats(post_data,id).subscribe(data => {
         console.log(post_data);
 
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);

@@ -11,28 +11,28 @@ export class arrayModel {
 
 // tslint:disable-next-line: class-name
 export class Product {
-  id: number;
+  id: string;
   name_ar: string;
   name_en: string;
-  category_id: ItemsCategory;
-  kenf_id: ItemsCategory;
-  purity_id: Karats[];
-  shop_id: Shop;
+  category: ItemsCategory;
+  kenf_collection: ItemsCategory;
+  purity: Karats[];
+  shop: Shop;
   weight: number;
   quantity: number;
   extra_price: number;
-  group_id: ItemsGroup;
-  unit_id: Units[];
+  group: ItemsGroup;
+  units: Units[];
   commission: number;
   description_ar: string;
   description_en: string;
   barcode: string;
   color: string;
-  ringSize: number;
+  ringSize: string;
   images: any[];
   isExclusive: boolean;
   hidden: boolean;
-  mainImage: string;
+  mainImage: {id: string, link: string};
   special_cat: any; 
 }
 

@@ -40,7 +40,7 @@ export class OrdersComponent implements OnInit {
       console.log(orders)
     })
     this.editForm = this.formBuilder.group({
-      order_id: [''],
+      oto_id: [''],
       // customer: ['', [Validators.required]],
       // discount: ['', [Validators.required]],
       // total: ['', [Validators.required]],
@@ -73,7 +73,7 @@ export class OrdersComponent implements OnInit {
   openEdit(content, id) {
     let newTable = this.transactions.filter(item => item._id == id);
 
-    this.editForm.controls['order_id'].setValue(newTable[0].order_id);
+    this.editForm.controls['oto_id'].setValue(newTable[0].tryoto_id);
     // this.editForm.controls['customer'].setValue(newTable[0].customer_id.name);
     // this.editForm.controls['discount'].setValue(newTable[0].coupon_id.code);
     // this.editForm.controls['total'].setValue(newTable[0].totalPrice);
@@ -97,10 +97,11 @@ export class OrdersComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-
-      this.customerService.updateOrder(post_data).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.customerService.updateOrder(post_data,id).subscribe(data => {
         this.transactions = this.transactions.map(item => {
-          if (item.order_id == post_data.order_id) {
+          if (item.id == id) {
             item.status = post_data.status;
           }
 
@@ -128,11 +129,10 @@ export class OrdersComponent implements OnInit {
     })
   }
 
-  changeOrderStatus(order_id, status) {
-    console.log(order_id,status);
-    this.customerService.updateOrder({ order_id: order_id, status }).subscribe(data => {
+  changeOrderStatus(id, status) {
+    this.customerService.updateOrder({ status },id).subscribe(data => {
       this.transactions = this.transactions.map(item => {
-        if (item.order_id == order_id) {
+        if (item.id == id) {
           item.status = status;
         }
         return item;

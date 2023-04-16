@@ -1,5 +1,5 @@
 export interface KenfCategory {
-    id: number;
+    id: string;
     name_en: string;
     name_ar: string;
     kenf_collection: string;

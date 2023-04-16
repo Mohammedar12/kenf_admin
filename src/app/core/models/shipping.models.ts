@@ -1,5 +1,5 @@
 export interface Shipping {
-    id: number;
+    id: string;
     company: string;
     price: number;
     time: Date;

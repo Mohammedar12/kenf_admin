@@ -12,6 +12,7 @@ import { UsergridComponent } from './usergrid/usergrid.component';
 import { UserlistComponent } from './userlist/userlist.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SharedDataUsersService } from './userlist/data';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   declarations: [UsergridComponent, UserlistComponent, ProfileComponent],
@@ -21,6 +22,7 @@ import { SharedDataUsersService } from './userlist/data';
     WidgetModule,
     UIModule,
     NgApexchartsModule,
+    NgxPaginationModule,
     NgbTooltipModule,
   ],
   providers: [

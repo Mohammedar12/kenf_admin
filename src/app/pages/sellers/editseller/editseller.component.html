@@ -56,18 +56,22 @@
 
                   <div class="form-group">
                     <label for="product-image" class="mt-2"> Documents</label>
-                    <dropzone class="dropzone" [ngClass]="{'is-invalid': submit && form.documents.errors}" (success)="onUploadSuccess($event)" [config]="config"></dropzone>
-                    <input id="documents" name="documents" type="hidden" formControlName="documents">
+                    <ngx-dropzone (change)="onSelect($event)">
+                      <ngx-dropzone-label>Drop documents here</ngx-dropzone-label>
+                      <ngx-dropzone-preview *ngFor="let f of files; index as i" [removable]="true" [removable]="true" (removed)="onRemove(f)">
+                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                      </ngx-dropzone-preview>
+                    </ngx-dropzone>
                     <div *ngIf="submit && form.documents.errors" class="invalid-feedback">
                       <span *ngIf="form.documents.errors.required">Documents are required. Upload at least 1.</span>
                     </div>
-                    <div *ngIf="files.length>0" class="dropzone-display">
+                    <div *ngIf="existingDocuments.length>0" class="dropzone-display">
                       <div class="row">
-                        <div *ngFor="let file of files" class="col-md-4">
+                        <div *ngFor="let file of existingDocuments" class="col-md-4">
                           <div class="document-display">
                             <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                             </a>
-                            <img src="{{backend + '/getfile/?id='  + file}}" class="img-fluid mx-auto d-block">
+                            <img src="{{imageBackend + file}}" class="img-fluid mx-auto d-block">
                             <!-- <img src="{{backend + '/images/?id='  + image.id}}" alt=""
                               class="img-fluid mx-auto d-block"> -->
                           </div>

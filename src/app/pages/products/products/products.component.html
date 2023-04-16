@@ -88,13 +88,13 @@
 
                 </div>
 
-                <a [routerLink]="['/products/detail',product.id]" href="javascript: void(0);"><img src="{{backend + '/getfile/?id='  + product.images[0].id}}" alt="" class="img-fluid mx-auto d-block"></a>
+                <a [routerLink]="['/products/detail',product.id]" href="javascript: void(0);"><img src="{{imageBackend + product.images[0].link}}" alt="" class="img-fluid mx-auto d-block"></a>
               </div>
               <div class="mt-4 text-center">
                 <h5 class="mb-3 text-truncate"><a [routerLink]="['/products/detail',product.id]" href="javascript: void(0);" class="text-dark">{{product.name_en}} </a>
                 </h5>
 
-                {{product.shop_id.app_name_en}}
+                {{product.shop?.app_name_en}}
 
               </div>
             </div>

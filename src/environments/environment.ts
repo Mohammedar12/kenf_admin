@@ -4,9 +4,10 @@
 
 export const environment = {
   production: true,
-  defaultauth: 'firebase',
-  backend: 'https://kenf.sa/api',
-  // backend: 'http://localhost:4000/api',
+  defaultauth: 'custom',
+  //backend: 'https://kenf.sa/api',
+  backend: 'http://localhost:3000/api',
+  imageBackend: 'http://localhost:3000',
   firebaseConfig: {
     apiKey: 'AIzaSyBSNQDNzQLJLyJWnG40AO27_TY7gRkqjho',
     authDomain: 'test-authentication-4be35.firebaseapp.com',

@@ -1,5 +1,5 @@
 export interface Seller {
-  id: number;
+  id: string;
   name_en:string;
   name_ar:string;
   email:string;
@@ -11,6 +11,5 @@ export interface Seller {
   city: string;
   region: string;
   zip: string;
-  documents: number[];
-
+  documents: string[];
 }

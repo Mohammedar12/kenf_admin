@@ -21,7 +21,7 @@ export class AddproductComponent implements OnInit {
 
   productForm: FormGroup;
   backend = environment.backend;
-
+  imageBackend = environment.imageBackend;
   // bread crumb items
   breadCrumbItems: Array<{}>;
   // Form submition
@@ -30,7 +30,7 @@ export class AddproductComponent implements OnInit {
   image = '';
   file = '';
   submit: boolean = false;
-  files: number[] = [];
+  files: {id: string, link: string}[] = [];
   shops: any[] = [];
   items_group: any[] = [];
   unit: any[] = [];
@@ -79,16 +79,16 @@ export class AddproductComponent implements OnInit {
     this.productForm = this.formBuilder.group({
       name_ar: ['', [Validators.required]],
       name_en: ['', [Validators.required]],
-      category_id: [null, [Validators.required]],
-      kenf_id: [null],
+      category: [null, [Validators.required]],
+      kenf: [null],
       ring_size: [null],
-      purity_id: [null, [Validators.required]],
-      shop_id: [null, [Validators.required]],
+      purity: [null, [Validators.required]],
+      shop: [null, [Validators.required]],
       weight: ['', [Validators.required]],
       extra_price: ['', [Validators.required]],
       quantity: ['', [Validators.required]],
-      group_id: [null, [Validators.required]],
-      unit_id: [null, [Validators.required]],
+      group: [null, [Validators.required]],
+      unit: [null, [Validators.required]],
       commission: ['', [Validators.required]],
       description_ar: ['', [Validators.required]],
       description_en: ['', [Validators.required]],
@@ -118,20 +118,15 @@ export class AddproductComponent implements OnInit {
 
   }
   onUploadSuccess(event){
-    // event[2].srcElement.then(response => response.json()).then(data => console.log(data)).catch(err => console.log(err));
     event[0].previewElement.parentNode.removeChild(event[0].previewElement);
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
-    console.log(this.productForm.controls);
+    //let response = JSON.parse(event[2].srcElement.response);
+    this.files.push({id: event[1].data[0].id,link: event[1].data[0].link});
 
-    this.productForm.controls.images.setValue(this.files);
+    this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   deleteImage(id) {
-    const index = this.files.indexOf(id);
-    if (index > -1) {
-      this.files.splice(index, 1); // 2nd parameter means remove one item only
-      this.productForm.controls.images.setValue(this.files);
-    }
+      this.files = this.files.filter((val)=>val.id !== id);
+      this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   /**
    * Bootsrap validation form submit method
@@ -144,7 +139,7 @@ export class AddproductComponent implements OnInit {
         return;
       } else {
         console.log(this.productForm);
-        this.setserv.addProduct(this.productForm.value).subscribe(data => this.router.navigate(['/products/list']));
+        this.setserv.createProduct(this.productForm.value).subscribe(data => this.router.navigate(['/products/list']));
       }
     }
 }

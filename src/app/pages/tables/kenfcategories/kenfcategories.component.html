@@ -138,7 +138,7 @@
               <div class="document-display">
                 <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                 </a>
-                <img src="{{backend + '/getfile/?id='  + file}}" class="img-fluid mx-auto d-block">
+                <img src="{{imageBackend + ''  + file.link}}" class="img-fluid mx-auto d-block">
               </div>
             </div>
           </div>
@@ -203,7 +203,7 @@
               <div class="document-display">
                 <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                 </a>
-                <img src="{{backend + '/getfile/?id='  + file}}" class="img-fluid mx-auto d-block">
+                <img src="{{imageBackend + ''  + file.link}}" class="img-fluid mx-auto d-block">
               </div>
             </div>
           </div>

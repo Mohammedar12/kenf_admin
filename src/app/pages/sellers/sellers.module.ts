@@ -12,6 +12,7 @@ import { NgbNavModule, NgbDropdownModule, NgbPaginationModule } from '@ng-bootst
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import { EditsellerComponent } from './editseller/editseller.component';
@@ -41,7 +42,8 @@ const config: DropzoneConfigInterface = {
     WidgetModule,
     Ng5SliderModule,
     NgSelectModule,
-    NgbPaginationModule
+    NgbPaginationModule,
+    NgxDropzoneModule
   ],
   providers: [
     {

@@ -48,7 +48,7 @@ function matches(tables: Offer, term: string, pipe: PipeTransform) {
         || tables.description_en.toLowerCase().includes(term.toLowerCase())
         || tables.start_date.toLowerCase().includes(term)
         || tables.end_date.toLowerCase().includes(term)
-        || tables.id == parseInt(term)
+        || tables.id == term
         || tables.status.toLowerCase().includes(term);
 }
 

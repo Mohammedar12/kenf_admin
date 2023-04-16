@@ -14,7 +14,7 @@ export class ItemsGroupResolver implements Resolve <Observable<ItemsGroup[]>>{
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
     // let id = route.parent.paramMap.get('id');
-    return this.ds.getItemsGroup();
+    return this.ds.getItemsGroupAll();
   }
 
 }

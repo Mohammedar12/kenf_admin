@@ -43,7 +43,7 @@ function sort(tables: Shipping[], column: string, direction: string): Shipping[]
  */
 function matches(tables: Shipping, term: string, pipe: PipeTransform) {
     return tables.company.toLowerCase().includes(term.toLowerCase())
-        || tables.id == parseInt(term)
+        || tables.id == term
 }
 
 @Injectable({

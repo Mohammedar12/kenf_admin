@@ -7,6 +7,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserProfileService } from '../../../core/services/user.service';
 import { UserGroup } from '../../../core/models/user_group.models';
+import { Pagination } from '../../../core/models/pagination.models';
 import { SharedDataUserGroupsService } from './data';
 
 import { AdvancedService } from './advanced.service';
@@ -118,7 +119,7 @@ export class UsergroupsComponent implements OnInit {
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'System Users' }, { label: 'Users Groups', active: true }];
     this.sharedDataService.currentTable.subscribe(tableData => (this.tableData = tableData));
-    this.setserv.getUserGroup().subscribe(val => this.sharedDataService.changeTable(val));
+    this.setserv.getUserGroup().subscribe(val => this.sharedDataService.changeTable(val.docs));
     this.newForm = this.formBuilder.group({
       name_ar: ['', [Validators.required]],
       name_en: ['', [Validators.required]],
@@ -199,7 +200,7 @@ export class UsergroupsComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateUserGroup(this.newForm.value).subscribe(data => {
+      this.setserv.AddUserGroup(this.newForm.value).subscribe(data => {
         this.tableData.push({ id: data.id, name_ar: data.name_ar, name_en: data.name_en, status: data.active,   permissions: data.permissions,});
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
@@ -216,8 +217,10 @@ export class UsergroupsComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.setserv.updateUserGroup(post_data).subscribe(data => {
-        console.log(post_data);
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateUserGroup(post_data,id).subscribe(data => {
+        console.log(data);
 
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
         this.tableData[findIndex] = { id: post_data.id, name_ar: post_data.name_ar, name_en: post_data.name_en, status: post_data.active, permissions: post_data.permissions};

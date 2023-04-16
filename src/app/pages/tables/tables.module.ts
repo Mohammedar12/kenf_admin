@@ -60,7 +60,7 @@ const config: DropzoneConfigInterface = {
     NgbDropdownModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbAlertModule,
+    NgbAlertModule
   ],
   exports: [
   ],

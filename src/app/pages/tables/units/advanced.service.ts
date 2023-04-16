@@ -44,7 +44,7 @@ function sort(tables: Units[], column: string, direction: string): Units[] {
 function matches(tables: Units, term: string, pipe: PipeTransform) {
   return tables.name_ar.toLowerCase().includes(term.toLowerCase())
       || tables.name_en.toLowerCase().includes(term)
-      || tables.id == parseInt(term)
+      || tables.id == term
       || tables.status.toLowerCase().includes(term);
 }
 

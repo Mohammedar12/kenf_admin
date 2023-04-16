@@ -36,11 +36,12 @@ export class AdduserComponent implements OnInit {
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'System Users' }, { label: 'Add User', active: true }];
     this.userService.getUserGroup().subscribe(data => {
-      this.userGroup = data;
+      this.userGroup = data.docs;
     });;
 
     this.adduserFormOne = this.formBuilder.group({
       name: ['', [Validators.required]],
+      password: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
       landline: ['',],
@@ -48,7 +49,7 @@ export class AdduserComponent implements OnInit {
 
     this.adduserFormTwo = this.formBuilder.group({
       photo: [''],
-      user_role: ['', [Validators.required]],
+      role: ['', [Validators.required]],
     });
 
     this.adduserFormThree = this.formBuilder.group({
@@ -81,7 +82,11 @@ export class AdduserComponent implements OnInit {
       console.log(this.adduserFormThree);
       if (!this.adduserFormThree.invalid) {
         console.log({ ...this.adduserFormOne.value, ...this.adduserFormTwo.value, ...this.adduserFormThree.value });
-        this.userService.adduser({ ...this.adduserFormOne.value, ...this.adduserFormTwo.value}).subscribe(data => this.router.navigate(['/contacts/list']))
+        let post_data = { ...this.adduserFormOne.value, ...this.adduserFormTwo.value};
+        post_data.role = post_data.role.toLowerCase();
+        delete post_data.photo;
+        delete post_data.landline;
+        this.userService.adduser(post_data).subscribe(data => this.router.navigate(['/contacts/list']))
 
       }
     }

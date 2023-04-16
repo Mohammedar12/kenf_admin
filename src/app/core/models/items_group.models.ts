@@ -1,5 +1,5 @@
 export interface ItemsGroup {
-    id: number;
+    id: string;
     name_en: string;
     name_ar: string;
     abbreviation: string;

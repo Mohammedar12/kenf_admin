@@ -27,6 +27,7 @@ export class ItemcategoriesComponent implements OnInit {
   breadCrumbItems: Array<{}>;
   // Table data
   backend = environment.backend;
+  imageBackend = environment.imageBackend;
   tableData: ItemsCategory[];
   public selected: any;
   hideme: boolean[] = [];
@@ -36,7 +37,7 @@ export class ItemcategoriesComponent implements OnInit {
   editForm: FormGroup;
   submitted = false;
   submittedEdit = false;
-  files: number[] = [];
+  files: {id: string, link: string}[] = [];
   config: DropzoneConfigInterface;
   error = '';
   image = '';
@@ -111,7 +112,7 @@ export class ItemcategoriesComponent implements OnInit {
     this.files = [];
 
     let newTable = this.tableData.filter(data => data.id == id);
-    this.files = newTable[0].images.map(item => item.id);
+    this.files = newTable[0].images;
 
     console.log(this.files, 'images files')
 
@@ -161,7 +162,7 @@ export class ItemcategoriesComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateCreateItemsCategory({...this.newForm.value, isKenf: false}).subscribe(data => {
+      this.setserv.createItemsCategory({...this.newForm.value, isKenf: false}).subscribe(data => {
         this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, kenf_collection: '', images: data.images.map(item => ({id: item}))});
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
@@ -179,7 +180,9 @@ export class ItemcategoriesComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.setserv.updateCreateItemsCategory({...post_data, images: post_data.images, isKenf: false}).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateItemsCategory({...post_data, images: post_data.images, isKenf: false},id).subscribe(data => {
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
         this.tableData[findIndex] = {id: post_data.id, name_ar: post_data.name_ar, name_en: post_data.name_en, abbreviation: post_data.abbreviation, status:   this.tableData[findIndex].status, kenf_collection: '', images: post_data.images.map(item => ({id: item}))};
         this.sharedDataService.changeTable(this.tableData);
@@ -211,18 +214,15 @@ export class ItemcategoriesComponent implements OnInit {
   }
   onUploadSuccess(event){
     event[0].previewElement.parentNode.removeChild(event[0].previewElement);
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
+    //let response = JSON.parse(event[2].srcElement.response);
+    this.files.push({id: event[1].data[0].id,link: event[1].data[0].link});
 
-    this.newForm.controls.images.setValue(this.files);
-    this.editForm.controls.images.setValue(this.files);
+    this.newForm.controls.images.setValue(this.files.map((val)=>val.id));
+    this.editForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   deleteImage(id) {
-    const index = this.files.indexOf(id);
-    if (index > -1) {
-      this.files.splice(index, 1); // 2nd parameter means remove one item only
-      this.newForm.controls.images.setValue(this.files);
-      this.editForm.controls.images.setValue(this.files);
-    }
+    this.files = this.files.filter((val)=>val.id !== id);
+    this.newForm.controls.images.setValue(this.files.map((val)=>val.id));
+    this.editForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
 }

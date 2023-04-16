@@ -44,7 +44,7 @@ function sort(tables: Coupon[], column: string, direction: string): Coupon[] {
 function matches(tables: Coupon, term: string, pipe: PipeTransform) {
     return tables.user
         || tables.code
-        || tables.id == parseInt(term);
+        || tables.id == term;
 }
 
 @Injectable({

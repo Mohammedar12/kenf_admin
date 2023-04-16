@@ -153,7 +153,7 @@ export class OffersComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateOffer(this.newForm.value).subscribe(data => {
+      this.setserv.createOffer(this.newForm.value).subscribe(data => {
         this.tableData.push({ id: data.id,
                               name_ar: data.name_ar,
                               name_en: data.name_en,
@@ -178,7 +178,9 @@ export class OffersComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.setserv.updateOffer(post_data).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateOffer(post_data,id).subscribe(data => {
         console.log(post_data);
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
         this.tableData[findIndex] = { id: post_data.id,

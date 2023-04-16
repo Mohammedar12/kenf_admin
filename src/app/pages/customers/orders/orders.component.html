@@ -43,9 +43,9 @@
                       <a href="javascript: void(0);" class="text-body font-weight-bold" (click)="openDetail(detailContent, product)">{{product.name_en}} </a>
                     </div>
                   </td>
-                  <td>{{data.customer_id.name}}</td>
+                  <td>{{data.customer?.name}}</td>
                   <td>
-                    {{data.coupon_id?.code}}
+                    {{data.coupon?.code}}
                   </td>
                   <td>{{data.price}}</td>
                   <td>{{data.createdAt | date:'dd/LL/YYYY' }}</td>
@@ -53,14 +53,14 @@
                     <button style="border: none;" [animation]="true" [ngbPopover]="popOver" [popoverTitle]="popTitle" class="badge badge-pill badge-soft-success font-size-12" [ngClass]=" { 'badge-soft-danger': data.status === 'REJECTED' || data.status === 'CANCELED', 'badge-soft-warning':data.status === 'SHIPPED' || data.status === 'DELIVERED', 'badge-soft-info': data.status === 'WAITING' }">{{data.status}}</button>
                     <ng-template #popOver>
                       <ul class="menu_list">
-                        <li (click)="changeOrderStatus(data.order_id,'WAITING')">WAITING</li>
-                        <li (click)="changeOrderStatus(data.order_id,'SHIPPED')">SHIPPED</li>
-                        <li (click)="changeOrderStatus(data.order_id,'PREPARED')">PREPARED</li>
-                        <li (click)="changeOrderStatus(data.order_id,'HAND_OVERED')">HAND_OVERED</li>
-                        <li (click)="changeOrderStatus(data.order_id,'DELIVERED')">DELIVERED</li>
-                        <li (click)="changeOrderStatus(data.order_id,'REJECTED')">REJECTED</li>
-                        <li (click)="changeOrderStatus(data.order_id,'CANCELED')">CANCELED</li>
-                        <li (click)="changeOrderStatus(data.order_id,'ACCEPTED')">ACCEPTED</li>
+                        <li (click)="changeOrderStatus(data.id,'WAITING')">WAITING</li>
+                        <li (click)="changeOrderStatus(data.id,'SHIPPED')">SHIPPED</li>
+                        <li (click)="changeOrderStatus(data.id,'PREPARED')">PREPARED</li>
+                        <li (click)="changeOrderStatus(data.id,'HAND_OVERED')">HAND_OVERED</li>
+                        <li (click)="changeOrderStatus(data.id,'DELIVERED')">DELIVERED</li>
+                        <li (click)="changeOrderStatus(data.id,'REJECTED')">REJECTED</li>
+                        <li (click)="changeOrderStatus(data.id,'CANCELED')">CANCELED</li>
+                        <li (click)="changeOrderStatus(data.id,'ACCEPTED')">ACCEPTED</li>
                       </ul>
                     </ng-template>
                     <!-- <ng-select *ngIf="change_badge" [items]="order_status" style="width: 150px;" [appendTo]="'body'" [(ngModel)]="selectedStatus"></ng-select> -->
@@ -71,8 +71,8 @@
                       <i class="mdi mdi-dots-vertical dropdown-toggle" ngbDropdownToggle data-toggle="dropdown"
                         aria-expanded="true"></i>
                       <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="openEdit(editContent, data._id)"><i class="mdi mdi-account-edit"></i>Status</a>
-                        <a class="dropdown-item" (click)="deleteGroupItem(data._id)"><i class="mdi mdi-delete"></i>Delete</a>
+                        <a class="dropdown-item" (click)="openEdit(editContent, data.id)"><i class="mdi mdi-account-edit"></i>Status</a>
+                        <a class="dropdown-item" (click)="deleteGroupItem(data.id)"><i class="mdi mdi-delete"></i>Delete</a>
                       </div>
                     </div>
                   </td>

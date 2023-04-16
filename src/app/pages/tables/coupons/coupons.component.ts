@@ -81,7 +81,7 @@ export class CouponsComponent implements OnInit {
     this.setserv.getCoupon().subscribe(val => this.sharedDataService.changeTable(val));
     this.newForm = this.formBuilder.group({
       user: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      email: ['', [Validators.required]],
       code: ['', [Validators.required]],
       discount_type: ['percent', [Validators.required]],
       discount: ['', [Validators.required]],
@@ -98,7 +98,7 @@ export class CouponsComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       id: [{ value: '', disabled: true }, [Validators.required]],
       user: ['', [Validators.required]],
-      password: [''],
+      email: [''],
       code: ['', [Validators.required]],
       discount_type: ['percent', [Validators.required]],
       discount: ['', [Validators.required]],
@@ -143,7 +143,7 @@ export class CouponsComponent implements OnInit {
       console.log(newTable[0].included_category);
       this.editForm.controls['id'].setValue(newTable[0].id);
       this.editForm.controls['user'].setValue(newTable[0].user);
-      this.editForm.controls['password'].setValue("");
+      this.editForm.controls['email'].setValue("");
       this.editForm.controls['code'].setValue(newTable[0].code);
       this.editForm.controls['discount'].setValue(newTable[0].discount);
       this.editForm.controls['discount_type'].setValue(newTable[0].discount_type);
@@ -225,10 +225,10 @@ export class CouponsComponent implements OnInit {
       if (this.newForm.invalid) {
         return;
       } else {
-        this.setserv.updateCoupon({...this.newForm.value}).subscribe(data => {
+        this.setserv.createCoupon({...this.newForm.value}).subscribe(data => {
           this.tableData.push({ id: data.id,
                                 user: data.user,
-                                password: data.password,
+                                email: data.email,
                                 code: data.code,
                                 discount_type: data.discount_type,
                                 discount: data.discount,
@@ -257,12 +257,14 @@ export class CouponsComponent implements OnInit {
         return;
       } else {
         let post_data = this.editForm.getRawValue();
-        this.setserv.updateCoupon({...post_data, discount_type: this.discountType, profit_type: this.profitType}).subscribe(data => {
+        let id = post_data.id;
+        delete post_data.id;
+        this.setserv.updateCoupon({...post_data, discount_type: this.discountType, profit_type: this.profitType},id).subscribe(data => {
           let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
           this.tableData[findIndex] = {
                                         id: post_data.id,
                                         user: post_data.user,
-                                        password: post_data.password,
+                                        email: post_data.email,
                                         code: post_data.code,
                                         discount_type: post_data.discount_type,
                                         discount: post_data.discount,

@@ -35,9 +35,10 @@ export class KenfcategoriesComponent implements OnInit {
   editForm: FormGroup;
   submitted = false;
   submittedEdit = false;
-  files: number[] = [];
+  files: {id: string, link: string}[] = [];
   config: DropzoneConfigInterface;
   backend = environment.backend;
+  imageBackend = environment.imageBackend;
   error = '';
 
   @ViewChildren(AdvancedSortableDirective) headers: QueryList<AdvancedSortableDirective>;
@@ -110,7 +111,7 @@ export class KenfcategoriesComponent implements OnInit {
   openEdit(content, id) {
     this.files = [];
     let newTable = this.tableData.filter(data => data.id == id);
-    this.files = newTable[0].images.map(item => item.id);
+    this.files = newTable[0].images;
     this.editForm.controls['id'].setValue(newTable[0].id);
     this.editForm.controls['name_ar'].setValue(newTable[0].name_ar);
     this.editForm.controls['name_en'].setValue(newTable[0].name_en);
@@ -158,7 +159,7 @@ export class KenfcategoriesComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.updateCreateItemsCategory({...this.newForm.value, isKenf: true}).subscribe(data => {
+      this.setserv.createItemsCategory({...this.newForm.value, isKenf: true}).subscribe(data => {
         this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, kenf_collection: '', images: data.images.map(item => ({id: item}))});
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
@@ -176,7 +177,9 @@ export class KenfcategoriesComponent implements OnInit {
       return;
     } else {
       let post_data = this.editForm.getRawValue();
-      this.setserv.updateCreateItemsCategory({...post_data, images: post_data.images, isKenf: true}).subscribe(data => {
+      let id = post_data.id;
+      delete post_data.id;
+      this.setserv.updateItemsCategory({...post_data, images: post_data.images, isKenf: true},id).subscribe(data => {
         let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
         this.tableData[findIndex] = {...post_data, status: this.tableData[findIndex].status, active: true, deleted: false, isKenf: true, images: post_data.images.map(item => ({id: item}))};
         this.sharedDataService.changeTable(this.tableData);

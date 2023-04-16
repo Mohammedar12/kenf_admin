@@ -22,7 +22,7 @@ export class EditproductComponent implements OnInit {
 
   productForm: FormGroup;
   backend = environment.backend;
-
+  imageBackend = environment.imageBackend;
   // bread crumb items
   breadCrumbItems: Array<{}>;
   // Form submition
@@ -31,13 +31,13 @@ export class EditproductComponent implements OnInit {
   image = '';
   file = '';
   submit: boolean = false;
-  files: number[] = [];
+  files: {id: string, link: string}[] = [];
   shops: any[] = [];
   items_group: any[] = [];
   unit: any[] = [];
-  unit_init: number[] = [];
+  unit_init: string[] = [];
   purity: any[] = [];
-  purity_init: number[] = [];
+  purity_init: string[] = [];
   items_category: any[] = [];
   kenf_category: any[] = [];
   isExclusive: boolean = false;
@@ -46,7 +46,7 @@ export class EditproductComponent implements OnInit {
   items_color: any[] = [];
   show_ringsize: boolean = false;
   customersData: Product;
-  mainImage: string;
+  mainImage: {id: string, link: string};
   special_locations: any[] = [];
   special_label: string;
 
@@ -55,7 +55,7 @@ export class EditproductComponent implements OnInit {
     console.log(this.config);
     this.customersData = this.route.snapshot.data.product;
     this.mainImage = this.customersData.mainImage;
-    this.show_ringsize = this.customersData.category_id.id <= 2 ? true : false;
+    this.show_ringsize = this.customersData.category?.id ? true : false;
     console.log('!!!!!!', this.customersData)
     let shops = this.route.snapshot.data.shops;
     shops.forEach(element => this.shops.push({id: element.id, name: element.app_name_en}));
@@ -84,10 +84,10 @@ export class EditproductComponent implements OnInit {
     this.customersData.images.forEach(element => {
       this.files.push(element.id);
     });
-    this.customersData.purity_id.forEach(element => {
+    this.customersData.purity?.forEach(element => {
         this.purity_init.push(element.id);
     });
-    this.customersData.unit_id.forEach(element => {
+    this.customersData.units?.forEach(element => {
         this.unit_init.push(element.id);
     });
       
@@ -112,16 +112,16 @@ export class EditproductComponent implements OnInit {
       id: [this.customersData.id, [Validators.required]],
       name_ar: [this.customersData.name_ar, [Validators.required]],
       name_en: [this.customersData.name_en, [Validators.required]],
-      category_id: [this.customersData.category_id.id, [Validators.required]],
-      kenf_id: [this.customersData.kenf_id],
+      category: [this.customersData.category?.id, [Validators.required]],
+      kenf_collection: [this.customersData.kenf_collection],
       ring_size: [this.customersData.ringSize],
-      purity_id: [this.purity_init, [Validators.required]],
-      shop_id: [this.customersData.shop_id.id, [Validators.required]],
+      purity: [this.purity_init, [Validators.required]],
+      shop: [this.customersData.shop?.id, [Validators.required]],
       weight: [this.customersData.weight, [Validators.required]],
       extra_price: [this.customersData.extra_price, [Validators.required]],
       quantity: [this.customersData.quantity, [Validators.required]],
-      group_id: [this.customersData.group_id.id, [Validators.required]],
-      unit_id: [this.unit_init, [Validators.required]],
+      group: [this.customersData.group?.id, [Validators.required]],
+      unit: [this.unit_init, [Validators.required]],
       commission: [this.customersData.commission, [Validators.required]],
       description_ar: [this.customersData.description_ar, [Validators.required]],
       description_en: [this.customersData.description_en, [Validators.required]],
@@ -131,7 +131,7 @@ export class EditproductComponent implements OnInit {
       isSpecial: [this.customersData.special_cat?.category ? true : false,[]],
       special_loc: [special_loc, []],
       special_cat_id: [special_cat_id,[]],
-      mainImage: [this.customersData.mainImage, []],
+      mainImage: [this.customersData.mainImage?.id, []],
     });
   }
   onShowSizeOfRing(event) {
@@ -188,23 +188,17 @@ export class EditproductComponent implements OnInit {
   }
   onMainImageSelect(file){
     this.mainImage = file;
-    this.productForm.controls.mainImage.setValue(file);
+    this.productForm.controls.mainImage.setValue(file.id);
   }
   onUploadSuccess(event){
-    // event[2].srcElement.then(response => response.json()).then(data => console.log(data)).catch(err => console.log(err));
     event[0].previewElement.parentNode.removeChild(event[0].previewElement);
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
-    console.log(this.productForm.controls);
-
-    this.productForm.controls.images.setValue(this.files);
+    //let response = JSON.parse(event[2].srcElement.response);
+    this.files.push({id: event[1].data[0].id,link: event[1].data[0].link});
+    this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   deleteImage(id) {
-    const index = this.files.indexOf(id);
-    if (index > -1) {
-      this.files.splice(index, 1); // 2nd parameter means remove one item only
-      this.productForm.controls.images.setValue(this.files);
-    }
+      this.files = this.files.filter((val)=>val.id !== id);
+      this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   /**
    * Bootsrap validation form submit method
@@ -215,7 +209,10 @@ export class EditproductComponent implements OnInit {
         return;
       } else {
         console.log('productedit', this.productForm.value);
-       this.setserv.addProduct(this.productForm.value).subscribe(data => this.router.navigate(['/products/list']));
+        let post_data = this.productForm.getRawValue();
+        let id = post_data.id;
+        delete post_data.id;
+       this.setserv.updateProduct(this.productForm.value,id).subscribe(data => this.router.navigate(['/products/list']));
       }
 
    }

@@ -131,7 +131,7 @@
                         <div class="document-display">
                           <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                           </a>
-                          <img src="{{backend + '/getfile/?id='  + file}}" class="img-fluid mx-auto d-block">
+                          <img src="{{imageBackend + ''  + file.links}}" class="img-fluid mx-auto d-block">
                           <!-- <img src="{{backend + '/images/?id='  + image.id}}" alt=""
                             class="img-fluid mx-auto d-block"> -->
                         </div>
@@ -145,12 +145,12 @@
               <div class="col-sm-6">
                 <div class="form-group">
                   <label class="control-label">Owner</label>
-                  <ng-select [ngClass]="{ 'is-invalid': submitted && f.seller_id.errors }" [items]="owners" bindLabel="email" bindValue="_id" formControlName="seller_id"></ng-select>
-                  <div *ngIf="submitted && f.seller_id.errors" class="invalid-feedback">
-                    <span *ngIf="f.seller_id.errors.required">Owner is required.</span>
+                  <ng-select [ngClass]="{ 'is-invalid': submitted && f.seller.errors }" [items]="owners" bindLabel="email" bindValue="_id" formControlName="seller"></ng-select>
+                  <div *ngIf="submitted && f.seller.errors" class="invalid-feedback">
+                    <span *ngIf="f.seller.errors.required">Owner is required.</span>
                   </div>
 
-                  <!-- <input type="hidden" name="seller_id" [value]="selectedOwner" > -->
+                  <!-- <input type="hidden" name="seller" [value]="selectedOwner" > -->
                 </div>
 
                 <div class="form-group">

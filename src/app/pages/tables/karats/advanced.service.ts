@@ -44,7 +44,7 @@ function sort(tables: Karats[], column: string, direction: string): Karats[] {
 function matches(tables: Karats, term: string, pipe: PipeTransform) {
   return tables.name_ar.toLowerCase().includes(term.toLowerCase())
       || tables.name_en.toLowerCase().includes(term)
-      || tables.id == parseInt(term)
+      || tables.id == term
       || tables.status.toLowerCase().includes(term);
 }
 

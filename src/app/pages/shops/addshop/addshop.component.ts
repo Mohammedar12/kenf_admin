@@ -21,33 +21,31 @@ export class AddshopComponent implements OnInit {
   // Form submition
   selectedOwner: number;
   backend = environment.backend;
-
+  imageBackend = environment.imageBackend;
   config: DropzoneConfigInterface;
   image = '';
   file = '';
   submit: boolean = false;
   submitted: boolean = false;
-  files: number[] = [];
+  files: {id: string, link: string}[] = [];
   owners: any[] = [];
   constructor(private route: ActivatedRoute,private router: Router, public formBuilder: FormBuilder, private http: HttpClient, private setserv: MarketingService, private userService: UserProfileService) {
     this.config = setserv.getUploadConfig();
-
-    console.log( this.owners);
   }
 
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'Shops' }, { label: 'Add Shop', active: true }];
-    this.userService.getAll().subscribe( val =>   {
+    this.userService.getAll(1).subscribe( val =>   {
       // let owners = this.route.snapshot.data.owners;
       let owners = [];
-      val.forEach(element => owners.push({...element}));
+      val.docs.forEach(element => owners.push({...element}));
       this.owners = owners;
       // this.customersData = val,
       console.log('Owner - ', this.owners);
     });
 
     this.productForm = this.formBuilder.group({
-      seller_id: [null, [Validators.required]],
+      seller: [null, [Validators.required]],
       app_name_ar: ['', [Validators.required]],
       app_name_en: ['', [Validators.required]],
       app_abbreviation: ['', [Validators.required]],
@@ -74,32 +72,25 @@ export class AddshopComponent implements OnInit {
   get f() {
     return this.productForm.controls;
   }
-  onUploadSuccess(event){
-    // event[2].srcElement.then(response => response.json()).then(data => console.log(data)).catch(err => console.log(err));
-    event[0].previewElement.parentNode.removeChild(event[0].previewElement);
-
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
-    console.log(this.productForm.controls);
-
-    this.productForm.controls.images.setValue(this.files);
-    this.submit = false;
-
+  
+  onUploadError(event){
+    console.log(event);
   }
+  onUploadSuccess(event){
+    event[0].previewElement.parentNode.removeChild(event[0].previewElement);
+    //let response = JSON.parse(event[2].srcElement.response);
+    this.files.push({id: event[1].data[0].id,link: event[1].data[0].link});
+    this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
+  }
+  deleteImage(id) {
+      this.files = this.files.filter((val)=>val.id !== id);
+      this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
+  }
+
   onAccept(file: any) {
     this.image = file.name;
     this.file = file;
   }
-  /**
-   * Bootsrap validation form submit method
-   */
-   deleteImage(id) {
-     const index = this.files.indexOf(id);
-     if (index > -1) {
-       this.files.splice(index, 1); // 2nd parameter means remove one item only
-       this.productForm.controls.images.setValue(this.files);
-     }
-   }
 
   validSubmit() {
     this.submit = true;
@@ -110,7 +101,7 @@ export class AddshopComponent implements OnInit {
     if (this.productForm.invalid) {
       return;
     } else {
-      this.setserv.addShop(this.productForm.value).subscribe(data => this.router.navigate(['/shops/list']));
+      this.setserv.createShop(this.productForm.value).subscribe(data => this.router.navigate(['/shops/list']));
 
 
     }

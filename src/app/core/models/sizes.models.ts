@@ -1,5 +1,5 @@
 export interface Sizes {
-    id: number;
+    id: string;
     name_en: string;
     name_ar: string;
     unit: string;

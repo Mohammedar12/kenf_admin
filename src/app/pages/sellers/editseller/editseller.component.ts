@@ -15,23 +15,24 @@ import { Seller } from '../../../core/models/seller.models';
 })
 export class EditsellerComponent implements OnInit {
   backend = environment.backend;
-
+  imageBackend = environment.imageBackend;
   productForm: FormGroup;
   // bread crumb items
   breadCrumbItems: Array<{}>;
   // Form submition
   submit: boolean = false;
 
-  config: DropzoneConfigInterface;
-  image = '';
-  file = '';
-  files: number[] = [];
   customersData: Seller;
 
+  files: File[] = [];
+  filesPreview: string[] = [];
+  
+  existingDocuments: string[] = [];
+  deletedDocumennts: string[] = [];
+
   constructor(private route: ActivatedRoute, private router: Router, public formBuilder: FormBuilder, private http: HttpClient, private setserv: MarketingService) {
-    this.config = setserv.getUploadConfig();
     this.customersData = this.route.snapshot.data.shop;
-    this.files = this.customersData.documents;
+    this.existingDocuments = this.customersData.documents;
 
   }
   /**
@@ -58,35 +59,30 @@ export class EditsellerComponent implements OnInit {
       city: [this.customersData.city, [Validators.required]],
       region: [this.customersData.region, [Validators.required]],
       zip: [this.customersData.zip, [Validators.required]],
-      documents: [this.customersData.documents, [Validators.required]],
     });
     this.submit = false;
   }
 
-  onAccept(file: any) {
-    this.image = file.name;
-    this.file = file;
+  
+  onSelect(event) {
+    this.files.push(...event.addedFiles);
+    let addedFiles= event.addedFiles;
+    for(let i=0;i<addedFiles.length;i++){
+      this.filesPreview.push(URL.createObjectURL(addedFiles[i]));
+    }
   }
-  /**
-   * Bootsrap validation form submit method
-   */
-  onUploadSuccess(event) {
-    // event[2].srcElement.then(response => response.json()).then(data => console.log(data)).catch(err => console.log(err));
-    event[0].previewElement.parentNode.removeChild(event[0].previewElement);
-
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
-    console.log(this.productForm.controls);
-
-    this.productForm.controls.documents.setValue(this.files);
-    this.submit = false;
-
+  
+  onRemove(event) {
+    let index = this.files.indexOf(event);
+    this.files.splice(index, 1);
+    this.filesPreview.splice(index, 1);
   }
-  deleteImage(id) {
-    const index = this.files.indexOf(id);
-    if (index > -1) {
-      this.files.splice(index, 1); // 2nd parameter means remove one item only
-      this.productForm.controls.documents.setValue(this.files);
+
+  deleteImage(img){
+    let index = this.existingDocuments.indexOf(img);
+    if (index !== -1) {
+      this.existingDocuments.splice(index, 1);
+      this.deletedDocumennts.push(img);
     }
   }
 
@@ -97,12 +93,23 @@ export class EditsellerComponent implements OnInit {
     if (this.productForm.invalid) {
       return;
     } else {
-      console.log(this.productForm);
-
-      this.setserv.addSeller(this.productForm.value).subscribe(data => this.router.navigate(['/sellers/list']));
+      let post_data = this.productForm.getRawValue();
+      let id = post_data.id;
+      delete post_data.id;
+      const formData = new FormData();
+      Object.entries(post_data).forEach(
+        ([key, value]: any[]) => {
+          formData.set(key, value);
+        }
+      )
+      for(let i=0;i<this.files.length;i++){
+        formData.set("documents["+i+"]", this.files[i]);
+      }
+      if(this.deletedDocumennts && this.deletedDocumennts.length > 0){
+        formData.set("deleteDocuments",JSON.stringify(this.deletedDocumennts))
+      }
+      this.setserv.updateSeller(formData,id).subscribe(data => this.router.navigate(['/sellers/list']));
       this.submit = false;
-
-
     }
     // const formData = new FormData();
     // formData.append('name', this.productForm.get('name').value);

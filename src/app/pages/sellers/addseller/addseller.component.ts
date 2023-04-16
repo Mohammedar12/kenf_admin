@@ -6,6 +6,7 @@ import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { MarketingService } from '../../../core/services/marketing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-addseller',
@@ -21,13 +22,10 @@ export class AddsellerComponent implements OnInit {
   // Form submition
   submit: boolean = false;
 
-  config: DropzoneConfigInterface;
-  image = '';
-  file = '';
-  files: number[] = [];
+  files: File[] = [];
+  filesPreview: string[] = [];
 
-  constructor(private router: Router, public formBuilder: FormBuilder, private http: HttpClient, private setserv: MarketingService) {
-    this.config = setserv.getUploadConfig();
+  constructor(private sanitizer: DomSanitizer,private router: Router, public formBuilder: FormBuilder, private http: HttpClient, private setserv: MarketingService) {
 
   }
   /**
@@ -52,36 +50,27 @@ export class AddsellerComponent implements OnInit {
       city: ['', [Validators.required]],
       region: [null, [Validators.required]],
       zip: ['', [Validators.required]],
-      documents: ['', [Validators.required]],
     });
     this.submit = false;
   }
 
-  onAccept(file: any) {
-    this.image = file.name;
-    this.file = file;
+  sanitizeImageUrl(imageUrl: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
   }
-  /**
-   * Bootsrap validation form submit method
-   */
-  onUploadSuccess(event) {
-    // event[2].srcElement.then(response => response.json()).then(data => console.log(data)).catch(err => console.log(err));
-    event[0].previewElement.parentNode.removeChild(event[0].previewElement);
 
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
-    console.log(this.productForm.controls);
 
-    this.productForm.controls.documents.setValue(this.files);
-    this.submit = false;
-
-  }
-  deleteImage(id) {
-    const index = this.files.indexOf(id);
-    if (index > -1) {
-      this.files.splice(index, 1); // 2nd parameter means remove one item only
-      this.productForm.controls.documents.setValue(this.files);
+  onSelect(event) {
+    this.files.push(...event.addedFiles);
+    let addedFiles= event.addedFiles;
+    for(let i=0;i<addedFiles.length;i++){
+      this.filesPreview.push(URL.createObjectURL(addedFiles[i]));
     }
+  }
+  
+  onRemove(event) {
+    let index = this.files.indexOf(event);
+    this.files.splice(index, 1);
+    this.filesPreview.splice(index, 1);
   }
 
   validSubmit() {
@@ -91,9 +80,16 @@ export class AddsellerComponent implements OnInit {
     if (this.productForm.invalid) {
       return;
     } else {
-      console.log(this.productForm);
-
-      this.setserv.addSeller(this.productForm.value).subscribe(data => this.router.navigate(['/sellers/list']));
+      const formData = new FormData();
+      Object.entries(this.productForm.getRawValue()).forEach(
+        ([key, value]: any[]) => {
+          formData.set(key, value);
+        }
+      )
+      for(let i=0;i<this.files.length;i++){
+        formData.set("documents["+i+"]", this.files[i]);
+      }
+      this.setserv.createSeller(formData).subscribe(data => this.router.navigate(['/sellers/list']));
       this.submit = false;
 
 

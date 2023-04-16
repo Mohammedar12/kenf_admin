@@ -3,8 +3,9 @@ import { DecimalPipe } from '@angular/common';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { UserGroup, SearchResult } from '../../../core/models/user_group.models';
-import { SharedDataUserGroupsService } from './data';
+import { UserProfileService } from '../../../core/services/user.service';
 import { SortDirection } from './advanced-sortable.directive';
+import { Pagination } from 'src/app/core/models/pagination.models';
 
 interface State {
     page: number;
@@ -44,7 +45,7 @@ function sort(tables: UserGroup[], column: string, direction: string): UserGroup
 function matches(tables: UserGroup, term: string, pipe: PipeTransform) {
     return tables.name_ar.toLowerCase().includes(term.toLowerCase())
         || tables.name_en.toLowerCase().includes(term)
-        || tables.id == parseInt(term)
+        || tables.id == term
         || tables.status.toLowerCase().includes(term);
 }
 
@@ -74,8 +75,7 @@ export class AdvancedService {
     };
 
     private tableData: UserGroup[];
-    constructor(private pipe: DecimalPipe,private sharedDataService: SharedDataUserGroupsService,) {
-        this.sharedDataService.currentTable.subscribe(tableData => (this.tableData = tableData));
+    constructor(private pipe: DecimalPipe,private sharedDataService: UserProfileService,) {
         this._search$.pipe(
             tap(() => this._loading$.next(true)),
             debounceTime(200),
@@ -83,8 +83,12 @@ export class AdvancedService {
             delay(200),
             tap(() => this._loading$.next(false))
         ).subscribe(result => {
-            this._tables$.next(result.tables);
-            this._total$.next(result.total);
+            //this.pageSize = result.limit;
+            this._state.startIndex = (this._state.page - 1) * this.pageSize + 1;
+            this._state.endIndex = (this._state.page - 1) * this.pageSize + this.pageSize;
+            this._state.totalRecords = result.totalDocs;
+            this._tables$.next(result.docs);
+            this._total$.next(result.totalDocs);
         });
         this._search$.next();
     }
@@ -112,11 +116,11 @@ export class AdvancedService {
     set pageSize(pageSize: number) { this._set({ pageSize }); }
     // tslint:disable-next-line: adjacent-overload-signatures
     // tslint:disable-next-line: adjacent-overload-signatures
-    set startIndex(startIndex: number) { this._set({ startIndex }); }
+    //set startIndex(startIndex: number) { this._set({ startIndex }); }
     // tslint:disable-next-line: adjacent-overload-signatures
-    set endIndex(endIndex: number) { this._set({ endIndex }); }
+    //set endIndex(endIndex: number) { this._set({ endIndex }); }
     // tslint:disable-next-line: adjacent-overload-signatures
-    set totalRecords(totalRecords: number) { this._set({ totalRecords }); }
+    //set totalRecords(totalRecords: number) { this._set({ totalRecords }); }
     // tslint:disable-next-line: adjacent-overload-signatures
     set searchTerm(searchTerm: string) { this._set({ searchTerm }); }
     set sortColumn(sortColumn: string) { this._set({ sortColumn }); }
@@ -130,26 +134,7 @@ export class AdvancedService {
     /**
      * Search Method
      */
-    private _search(): Observable<SearchResult> {
-        const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
-
-        // 1. sort
-        let tables = sort(this.tableData, sortColumn, sortDirection);
-
-        // 2. filter
-        tables = tables.filter(table => matches(table, searchTerm, this.pipe));
-        const total = tables.length;
-
-        // 3. paginate
-        this.totalRecords = tables.length;
-        this._state.startIndex = (page - 1) * this.pageSize + 1;
-        this._state.endIndex = (page - 1) * this.pageSize + this.pageSize;
-        if (this.endIndex > this.totalRecords) {
-            this.endIndex = this.totalRecords;
-        }
-        tables = tables.slice(this._state.startIndex - 1, this._state.endIndex);
-        return of(
-            { tables, total }
-        );
+    private _search(): Observable<Pagination<UserGroup>> {
+        return this.sharedDataService.getUserGroup(this._state.page, this._state.pageSize, this._state.searchTerm);
     }
 }

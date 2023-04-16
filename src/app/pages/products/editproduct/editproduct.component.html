@@ -40,16 +40,16 @@
                 </div>
                 <div class="form-group">
                   <label class="control-label">Shop</label>
-                  <ng-select [items]="shops" bindLabel="name" bindValue="id" [ngClass]="{'is-invalid': submit && form.shop_id.errors}" formControlName="shop_id"></ng-select>
-                  <div *ngIf="submit && form.shop_id.errors" class="invalid-feedback">
-                    <span *ngIf="form.shop_id.errors.required">Shop is required.</span>
+                  <ng-select [items]="shops" bindLabel="name" bindValue="id" [ngClass]="{'is-invalid': submit && form.shop.errors}" formControlName="shop"></ng-select>
+                  <div *ngIf="submit && form.shop.errors" class="invalid-feedback">
+                    <span *ngIf="form.shop.errors.required">Shop is required.</span>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="control-label">Group</label>
-                  <ng-select [items]="items_group" [ngClass]="{'is-invalid': submit && form.group_id.errors}" bindLabel="name" bindValue="id" formControlName="group_id"></ng-select>
-                  <div *ngIf="submit && form.shop_id.errors" class="invalid-feedback">
-                    <span *ngIf="form.shop_id.errors.required">Group is required.</span>
+                  <ng-select [items]="items_group" [ngClass]="{'is-invalid': submit && form.group.errors}" bindLabel="name" bindValue="id" formControlName="group"></ng-select>
+                  <div *ngIf="submit && form.shop.errors" class="invalid-feedback">
+                    <span *ngIf="form.shop.errors.required">Group is required.</span>
                   </div>
                 </div>
                 <div class="form-group">
@@ -72,7 +72,7 @@
                       <div class="document-display" (click)="onMainImageSelect(file)" [ngStyle]="{'border-color': (mainImage === file) ? 'blue' : ''}" style="cursor: pointer;">
                         <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                         </a>
-                        <img src="{{backend + '/getfile/?id='  + file}}" class="img-fluid mx-auto d-block">
+                        <img src="{{imageBackend + ''  + file.link}}" class="img-fluid mx-auto d-block">
                         <!-- <img src="{{backend + '/images/?id='  + image.id}}" alt=""
                             class="img-fluid mx-auto d-block"> -->
                       </div>
@@ -86,15 +86,15 @@
                     <input type="checkbox" class="custom-control-input" id="isSpecial" formControlName="isSpecial" (change)="changeSepcial($event)">
                     <label class="custom-control-label" for="isSpecial"></label>
                   </div>
-                  <div *ngIf="submit && form.shop_id.errors" class="invalid-feedback">
-                    <span *ngIf="form.shop_id.errors.required">Group is required.</span>
+                  <div *ngIf="submit && form.shop.errors" class="invalid-feedback">
+                    <span *ngIf="form.shop.errors.required">Group is required.</span>
                   </div>
                 </div>
                 <div class="form-group" [style.display]="isSpecial ? 'block' : 'none'">
                   <label class="control-label">Location</label>
                   <ng-select [items]="special_locations" bindLabel="name" bindValue="name" formControlName="special_loc" (change)="changeSepcialLoc($event)"></ng-select>
-                  <div *ngIf="submit && form.shop_id.errors" class="invalid-feedback">
-                    <span *ngIf="form.shop_id.errors.required">Group is required.</span>
+                  <div *ngIf="submit && form.shop.errors" class="invalid-feedback">
+                    <span *ngIf="form.shop.errors.required">Group is required.</span>
                   </div>
                   <input formControlName="special_cat_id" type="hidden"/>
                   <label class="control-label">{{ special_label }}</label>
@@ -104,9 +104,9 @@
               <div class="col-sm-6">
                 <div class="form-group">
                   <label class="control-label">Category</label>
-                  <ng-select [items]="items_category" [ngClass]="{'is-invalid': submit && form.category_id.errors}" (change)="onShowSizeOfRing($event)" bindLabel="name" bindValue="id" formControlName="category_id"></ng-select>
-                  <div *ngIf="submit && form.category_id.errors" class="invalid-feedback">
-                    <span *ngIf="form.category_id.errors.required">Category is required.</span>
+                  <ng-select [items]="items_category" [ngClass]="{'is-invalid': submit && form.category.errors}" (change)="onShowSizeOfRing($event)" bindLabel="name" bindValue="id" formControlName="category"></ng-select>
+                  <div *ngIf="submit && form.category.errors" class="invalid-feedback">
+                    <span *ngIf="form.category.errors.required">Category is required.</span>
                   </div>
                 </div>
                 <div *ngIf="show_ringsize" class="form-group">
@@ -118,16 +118,16 @@
                 </div>
                 <div class="form-group">
                   <label class="control-label">Collection</label>
-                  <ng-select [items]="kenf_category" [ngClass]="{'is-invalid': submit && form.kenf_id.errors}" bindLabel="name" bindValue="id" formControlName="kenf_id" (change)="onChangeCollection($event)"></ng-select>
-                  <div *ngIf="submit && form.kenf_id.errors" class="invalid-feedback">
-                    <span *ngIf="form.kenf_id.errors.required">Collection is required.</span>
+                  <ng-select [items]="kenf_category" [ngClass]="{'is-invalid': submit && form.kenf_collection.errors}" bindLabel="name" bindValue="id" formControlName="kenf_collection" (change)="onChangeCollection($event)"></ng-select>
+                  <div *ngIf="submit && form.kenf_collection.errors" class="invalid-feedback">
+                    <span *ngIf="form.kenf_collection.errors.required">Collection is required.</span>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="control-label">Purity (Karats)</label>
-                  <ng-select [items]="purity" [ngClass]="{'is-invalid': submit && form.purity_id.errors}" bindLabel="name" bindValue="id" formControlName="purity_id" [multiple]="true"></ng-select>
-                  <div *ngIf="submit && form.purity_id.errors" class="invalid-feedback">
-                    <span *ngIf="form.purity_id.errors.required">Purity is required.</span>
+                  <ng-select [items]="purity" [ngClass]="{'is-invalid': submit && form.purity.errors}" bindLabel="name" bindValue="id" formControlName="purity" [multiple]="true"></ng-select>
+                  <div *ngIf="submit && form.purity.errors" class="invalid-feedback">
+                    <span *ngIf="form.purity.errors.required">Purity is required.</span>
                   </div>
                 </div>
                 <div class="form-group">
@@ -140,9 +140,9 @@
                 <div class="form-group">
                   <label class="control-label">Unit</label>
 
-                  <ng-select [items]="unit" [ngClass]="{'is-invalid': submit && form.unit_id.errors}" bindLabel="name" bindValue="id" formControlName="unit_id" [multiple]="true"></ng-select>
-                  <div *ngIf="submit && form.unit_id.errors" class="invalid-feedback">
-                    <span *ngIf="form.unit_id.errors.required">Unit is required.</span>
+                  <ng-select [items]="unit" [ngClass]="{'is-invalid': submit && form.unit.errors}" bindLabel="name" bindValue="id" formControlName="unit" [multiple]="true"></ng-select>
+                  <div *ngIf="submit && form.unit.errors" class="invalid-feedback">
+                    <span *ngIf="form.unit.errors.required">Unit is required.</span>
                   </div>
                 </div>
 

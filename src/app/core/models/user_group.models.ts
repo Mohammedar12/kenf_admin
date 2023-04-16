@@ -1,5 +1,5 @@
 export interface UserGroup {
-    id: number;
+    id: string;
     name_en: string;
     name_ar: string;
     permissions: string[];
