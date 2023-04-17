@@ -3,7 +3,6 @@ export interface ItemsCategory {
     name_en: string;
     name_ar: string;
     abbreviation: string;
-    kenf_collection: string;
     images: any[];
     status: string;
 

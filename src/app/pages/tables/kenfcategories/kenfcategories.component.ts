@@ -64,7 +64,6 @@ export class KenfcategoriesComponent implements OnInit {
       name_ar: ['', [Validators.required]],
       name_en: ['kenf', [Validators.required]],
       abbreviation: ['kenf', [Validators.required]],
-      kenf_collection: ['', [Validators.required]],
       images: ['', [Validators.required]]
     });
     this.editForm = this.formBuilder.group({
@@ -72,7 +71,6 @@ export class KenfcategoriesComponent implements OnInit {
       name_ar: ['', [Validators.required]],
       name_en: ['kenf', [Validators.required]],
       abbreviation: ['kenf', [Validators.required]],
-      kenf_collection: ['', [Validators.required]],
       images: ['', [Validators.required]]
     });
     this.breadCrumbItems = [{ label: 'System Setting' }, { label: 'Kenf Categories', active: true }];
@@ -116,8 +114,7 @@ export class KenfcategoriesComponent implements OnInit {
     this.editForm.controls['name_ar'].setValue(newTable[0].name_ar);
     this.editForm.controls['name_en'].setValue(newTable[0].name_en);
     this.editForm.controls['abbreviation'].setValue(newTable[0].abbreviation);
-    this.editForm.controls['kenf_collection'].setValue(newTable[0].kenf_collection);
-    this.editForm.controls['images'].setValue(newTable[0].images);
+    this.editForm.controls['images'].setValue(newTable[0].images?.map((val)=>(val?.id)));
 
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.editForm.reset();
@@ -160,7 +157,7 @@ export class KenfcategoriesComponent implements OnInit {
       return;
     } else {
       this.setserv.createItemsCategory({...this.newForm.value, isKenf: true}).subscribe(data => {
-        this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, kenf_collection: '', images: data.images.map(item => ({id: item}))});
+        this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: data.images.map(item => ({id: item}))});
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
         modal.close();
@@ -180,7 +177,7 @@ export class KenfcategoriesComponent implements OnInit {
       let id = post_data.id;
       delete post_data.id;
       this.setserv.updateItemsCategory({...post_data, images: post_data.images, isKenf: true},id).subscribe(data => {
-        let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
+        let findIndex =   this.tableData.findIndex(data => data.id == post_data.id);
         this.tableData[findIndex] = {...post_data, status: this.tableData[findIndex].status, active: true, deleted: false, isKenf: true, images: post_data.images.map(item => ({id: item}))};
         this.sharedDataService.changeTable(this.tableData);
         this.submittedEdit = false;
@@ -210,18 +207,14 @@ export class KenfcategoriesComponent implements OnInit {
   }
   onUploadSuccess(event){
     event[0].previewElement.parentNode.removeChild(event[0].previewElement);
-    let response = JSON.parse(event[2].srcElement.response);
-    this.files.push(response.id);
+    this.files.push({id: event[1].data[0].id,link: event[1].data[0].link});
 
-    this.newForm.controls.images.setValue(this.files);
-    this.editForm.controls.images.setValue(this.files);
+    this.newForm.controls.images.setValue(this.files.map((val)=>val.id));
+    this.editForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   deleteImage(id) {
-    const index = this.files.indexOf(id);
-    if (index > -1) {
-      this.files.splice(index, 1); // 2nd parameter means remove one item only
-      this.newForm.controls.images.setValue(this.files);
-      this.editForm.controls.images.setValue(this.files);
-    }
+    this.files = this.files.filter((val)=>val.id !== id);
+    this.newForm.controls.images.setValue(this.files.map((val)=>val.id));
+    this.editForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
 }

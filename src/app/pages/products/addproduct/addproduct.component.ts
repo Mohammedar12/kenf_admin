@@ -80,8 +80,8 @@ export class AddproductComponent implements OnInit {
       name_ar: ['', [Validators.required]],
       name_en: ['', [Validators.required]],
       category: [null, [Validators.required]],
-      kenf: [null],
-      ring_size: [null],
+      kenf_collection: [null],
+      ringSize: [null],
       purity: [null, [Validators.required]],
       shop: [null, [Validators.required]],
       weight: ['', [Validators.required]],
@@ -99,7 +99,8 @@ export class AddproductComponent implements OnInit {
   }
 
   onShowSizeOfRing(event) {
-    this.show_ringsize = event.id <= 2 ? true : false;
+    //this.show_ringsize = event.id <= 2 ? true : false;
+    this.show_ringsize = true;
   }
 
   onUploadInit(event) {
@@ -121,7 +122,8 @@ export class AddproductComponent implements OnInit {
     event[0].previewElement.parentNode.removeChild(event[0].previewElement);
     //let response = JSON.parse(event[2].srcElement.response);
     this.files.push({id: event[1].data[0].id,link: event[1].data[0].link});
-
+    console.log(this.files);
+    console.log(this.files.map((val)=>val.id));
     this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
   }
   deleteImage(id) {

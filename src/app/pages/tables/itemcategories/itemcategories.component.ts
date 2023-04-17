@@ -120,7 +120,7 @@ export class ItemcategoriesComponent implements OnInit {
     this.editForm.controls['name_ar'].setValue(newTable[0].name_ar);
     this.editForm.controls['name_en'].setValue(newTable[0].name_en);
     this.editForm.controls['abbreviation'].setValue(newTable[0].abbreviation);
-    this.editForm.controls['images'].setValue(newTable[0].images);
+    this.editForm.controls['images'].setValue(newTable[0].images?.map((val)=>(val?.id)));
 
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.editForm.reset();
@@ -162,8 +162,10 @@ export class ItemcategoriesComponent implements OnInit {
     if (this.newForm.invalid) {
       return;
     } else {
-      this.setserv.createItemsCategory({...this.newForm.value, isKenf: false}).subscribe(data => {
-        this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, kenf_collection: '', images: data.images.map(item => ({id: item}))});
+      let post_data = {...this.newForm.value, isKenf: false};
+      this.setserv.createItemsCategory(post_data).subscribe(data => {
+        data = data.data;
+        this.tableData = [{id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: data.images?.map((val)=>({id: val}))}].concat(this.tableData);
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
         modal.close();
@@ -183,8 +185,9 @@ export class ItemcategoriesComponent implements OnInit {
       let id = post_data.id;
       delete post_data.id;
       this.setserv.updateItemsCategory({...post_data, images: post_data.images, isKenf: false},id).subscribe(data => {
-        let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
-        this.tableData[findIndex] = {id: post_data.id, name_ar: post_data.name_ar, name_en: post_data.name_en, abbreviation: post_data.abbreviation, status:   this.tableData[findIndex].status, kenf_collection: '', images: post_data.images.map(item => ({id: item}))};
+        data = { ...this.editForm.getRawValue(), images: post_data.images, isKenf: false };
+        let findIndex = this.tableData.findIndex(val => val.id == data.id);
+        this.tableData[findIndex] = {id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: this.tableData[findIndex].status, images: data.images};
         this.sharedDataService.changeTable(this.tableData);
         this.submittedEdit = false;
         modal.close();
@@ -194,7 +197,7 @@ export class ItemcategoriesComponent implements OnInit {
   }
   deleteGroupItem(id){
     this.setserv.delItemsCategory(id).subscribe(data => {
-      let newTable = this.tableData.filter(data => data.id != id);
+      let newTable = this.tableData.filter(val => val.id != id);
       console.log(newTable);
       this.sharedDataService.changeTable(newTable);
     });

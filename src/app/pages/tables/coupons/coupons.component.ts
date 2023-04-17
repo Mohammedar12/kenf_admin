@@ -140,10 +140,10 @@ export class CouponsComponent implements OnInit {
     }
     openEdit(content, id) {
       let newTable = this.tableData.filter(data => data.id == id);
-      console.log(newTable[0].included_category);
+      console.log(newTable[0]);
       this.editForm.controls['id'].setValue(newTable[0].id);
       this.editForm.controls['user'].setValue(newTable[0].user);
-      this.editForm.controls['email'].setValue("");
+      this.editForm.controls['email'].setValue(newTable[0].email);
       this.editForm.controls['code'].setValue(newTable[0].code);
       this.editForm.controls['discount'].setValue(newTable[0].discount);
       this.editForm.controls['discount_type'].setValue(newTable[0].discount_type);
@@ -152,10 +152,10 @@ export class CouponsComponent implements OnInit {
       this.editForm.controls['profit_type'].setValue(newTable[0].profit_type);
       this.editForm.controls['max_discount'].setValue(newTable[0].max_discount);
       this.editForm.controls['total_purchase_condition'].setValue(newTable[0].total_purchase_condition);
-      this.editForm.controls['included_category'].setValue(newTable[0].included_category.id);
+      this.editForm.controls['included_category'].setValue(newTable[0].included_category);
       this.editForm.controls['except_discounted_product'].setValue(newTable[0].except_discounted_product);
-      this.editForm.controls['start_date'].setValue(newTable[0].start_date);
-      this.editForm.controls['end_date'].setValue(newTable[0].end_date);
+      this.editForm.controls['start_date'].setValue(newTable[0].start_date?.substring(0, 10));
+      this.editForm.controls['end_date'].setValue(newTable[0].end_date?.substring(0, 10));
 
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
         this.editForm.reset();
@@ -225,7 +225,11 @@ export class CouponsComponent implements OnInit {
       if (this.newForm.invalid) {
         return;
       } else {
-        this.setserv.createCoupon({...this.newForm.value}).subscribe(data => {
+        let post_data = {...this.newForm.value};
+        if(post_data.discount_type === 'fixed'){
+          delete post_data.max_discount;
+        }
+        this.setserv.createCoupon(post_data).subscribe(data => {
           this.tableData.push({ id: data.id,
                                 user: data.user,
                                 email: data.email,
@@ -259,7 +263,10 @@ export class CouponsComponent implements OnInit {
         let post_data = this.editForm.getRawValue();
         let id = post_data.id;
         delete post_data.id;
-        this.setserv.updateCoupon({...post_data, discount_type: this.discountType, profit_type: this.profitType},id).subscribe(data => {
+        if(post_data.discount_type === 'fixed'){
+          delete post_data.max_discount;
+        }
+        this.setserv.updateCoupon(post_data,id).subscribe(data => {
           let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
           this.tableData[findIndex] = {
                                         id: post_data.id,

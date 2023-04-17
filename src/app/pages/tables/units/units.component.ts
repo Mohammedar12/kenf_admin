@@ -139,6 +139,7 @@ export class UnitsComponent implements OnInit {
       return;
     } else {
       this.setserv.createUnits(this.newForm.value).subscribe(data => {
+        data = data.data;
         this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, status: data.active});
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
@@ -158,10 +159,10 @@ export class UnitsComponent implements OnInit {
       let id = post_data.id;
       delete post_data.id;
       this.setserv.updateUnits(post_data,id).subscribe(data => {
-        console.log(post_data);
+        data = this.editForm.getRawValue();
 
-        let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
-        this.tableData[findIndex] = {id: post_data.id, name_ar: post_data.name_ar, name_en: post_data.name_en, status:   this.tableData[findIndex].status};
+        let findIndex = this.tableData.findIndex((val) => val.id == data.id);
+        this.tableData[findIndex] = {id: data.id, name_ar: data.name_ar, name_en: data.name_en, status:   this.tableData[findIndex].status};
         this.sharedDataService.changeTable(this.tableData);
         this.submittedEdit = false;
         modal.close();

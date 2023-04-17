@@ -42,7 +42,7 @@ function sort(tables: Shipping[], column: string, direction: string): Shipping[]
  * @param term Search the value
  */
 function matches(tables: Shipping, term: string, pipe: PipeTransform) {
-    return tables.company.toLowerCase().includes(term.toLowerCase())
+    return tables.company?.toLowerCase().includes(term.toLowerCase())
         || tables.id == term
 }
 

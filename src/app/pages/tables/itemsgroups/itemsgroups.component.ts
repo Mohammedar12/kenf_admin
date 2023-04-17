@@ -30,7 +30,7 @@ export class ItemsgroupsComponent implements OnInit {
   imageBackend = environment.imageBackend;
   breadCrumbItems: Array<{}>;
   // Table data
-  tableData: ItemsGroup[];
+  tableData: any;
   public selected: any;
   hideme: boolean[] = [];
   tables$: Observable<ItemsGroup[]>;
@@ -109,14 +109,13 @@ export class ItemsgroupsComponent implements OnInit {
   }
   openEdit(content, id) {
     this.files = [];
-
-    let newTable = this.tableData.filter(data => data.id == id);
+    let newTable = this.tableData.docs.filter(data => data.id == id);
     this.files = newTable[0].images;
     this.editForm.controls['id'].setValue(newTable[0].id);
     this.editForm.controls['name_ar'].setValue(newTable[0].name_ar);
     this.editForm.controls['name_en'].setValue(newTable[0].name_en);
     this.editForm.controls['abbreviation'].setValue(newTable[0].abbreviation);
-    this.editForm.controls['images'].setValue(newTable[0].images);
+    this.editForm.controls['images'].setValue(newTable[0].images.map((val)=>(val?.id)));
 
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.editForm.reset();
@@ -159,9 +158,11 @@ export class ItemsgroupsComponent implements OnInit {
       return;
     } else {
       this.setserv.createItemsGroup(this.newForm.value).subscribe(data => {
-        console.log('onsubmit', data)
-        //this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: data.images.map(item => ({id: item}))});
-        //this.sharedDataService.changeTable(this.tableData);
+        data = data.data;
+        this.tableData.docs = [{id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: data.images}].concat(this.tableData.docs);
+        this.tableData.totalDocs +=  1;
+        this.sharedDataService.changeTable(this.tableData);
+        this.service.page = 1;
         this.submitted = false;
         modal.close();
         this.newForm.reset();
@@ -180,11 +181,11 @@ export class ItemsgroupsComponent implements OnInit {
       let id = post_data.id;
       delete post_data.id;
       this.setserv.updateItemsGroup(post_data,id).subscribe(data => {
-        console.log(post_data.images.map(item => ({id: item})));
-
-        let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
-        this.tableData[findIndex] = {id: post_data.id, name_ar: post_data.name_ar, name_en: post_data.name_en, abbreviation: post_data.abbreviation, status: this.tableData[findIndex].status, images: post_data.images.map(item => ({id: item}))};
+        data = this.editForm.getRawValue();
+        let findIndex = this.tableData.docs.findIndex(val => val.id == data.id);
+        this.tableData.docs[findIndex] = {id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: this.tableData.docs[findIndex]?.status, images: data.images};
         this.sharedDataService.changeTable(this.tableData);
+        this.service.page = this.service.page;
         this.submittedEdit = false;
         modal.close();
         this.editForm.reset();
@@ -193,9 +194,10 @@ export class ItemsgroupsComponent implements OnInit {
   }
   deleteGroupItem(id){
     this.setserv.delItemsGroup(id).subscribe(data => {
-      let newTable = this.tableData.filter(data => data.id != id);
+      let newTable = this.tableData.docs.filter(data => data.id != id);
       console.log(newTable);
       this.sharedDataService.changeTable(newTable);
+      this.service.page = this.service.page;
       // modal.close();
       // this.newForm.reset();
     });

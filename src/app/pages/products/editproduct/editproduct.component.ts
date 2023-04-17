@@ -82,12 +82,12 @@ export class EditproductComponent implements OnInit {
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'Products' }, { label: 'Edit Product', active: true }];
     this.customersData.images.forEach(element => {
-      this.files.push(element.id);
+      this.files.push({id: element.id, link: element.link});
     });
     this.customersData.purity?.forEach(element => {
         this.purity_init.push(element.id);
     });
-    this.customersData.units?.forEach(element => {
+    this.customersData.unit?.forEach(element => {
         this.unit_init.push(element.id);
     });
       
@@ -114,7 +114,7 @@ export class EditproductComponent implements OnInit {
       name_en: [this.customersData.name_en, [Validators.required]],
       category: [this.customersData.category?.id, [Validators.required]],
       kenf_collection: [this.customersData.kenf_collection],
-      ring_size: [this.customersData.ringSize],
+      ringSize: [this.customersData.ringSize],
       purity: [this.purity_init, [Validators.required]],
       shop: [this.customersData.shop?.id, [Validators.required]],
       weight: [this.customersData.weight, [Validators.required]],
@@ -126,7 +126,7 @@ export class EditproductComponent implements OnInit {
       description_ar: [this.customersData.description_ar, [Validators.required]],
       description_en: [this.customersData.description_en, [Validators.required]],
       color: [this.customersData.color, [Validators.required]],
-      images: [this.customersData.images, [Validators.required]],
+      images: [this.customersData.images?.map((val)=>(val.id)), [Validators.required]],
       isExclusive: [this.customersData.isExclusive, [Validators.required]],
       isSpecial: [this.customersData.special_cat?.category ? true : false,[]],
       special_loc: [special_loc, []],
@@ -135,7 +135,7 @@ export class EditproductComponent implements OnInit {
     });
   }
   onShowSizeOfRing(event) {
-    this.show_ringsize = event.id <= 2 ? true : false;
+    this.show_ringsize = true;
     if(this.productForm.get("special_loc").value === 'Category'){
       this.special_label = event.name;
       this.productForm.controls.special_cat_id.setValue(event.id);
@@ -208,11 +208,18 @@ export class EditproductComponent implements OnInit {
       if (this.productForm.invalid) {
         return;
       } else {
-        console.log('productedit', this.productForm.value);
         let post_data = this.productForm.getRawValue();
         let id = post_data.id;
         delete post_data.id;
-       this.setserv.updateProduct(this.productForm.value,id).subscribe(data => this.router.navigate(['/products/list']));
+        delete post_data.special_loc;
+        if(post_data.isSpecial === false){
+          delete post_data.special_cat_id;
+        }
+        if(!post_data.mainImage){
+          delete post_data.mainImage;
+        }
+        console.log('productedit', post_data);
+       this.setserv.updateProduct(post_data,id).subscribe(data => this.router.navigate(['/products/list']));
       }
 
    }

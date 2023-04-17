@@ -24,6 +24,7 @@ export class OrdersComponent implements OnInit {
   change_badge = [true, ];
   editForm;
   backend = environment.backend;
+  imageBackend = environment.imageBackend;
   error = '';
   submitted = false;
   submittedEdit = false;
@@ -56,10 +57,10 @@ export class OrdersComponent implements OnInit {
     console.log(status)
   }
 
-  openDetail(content, product) {
+  openDetail(content, product,item) {
     this.generateQrcode = product.barcode;
     this.selectedProductTitle = product.name_en;
-    this.selectedProductPrice = product.extra_price;
+    this.selectedProductPrice = item.price;
     this.selectedProductImage = product.images[0];
 
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {

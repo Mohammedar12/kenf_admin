@@ -60,7 +60,7 @@ export class SettingsService {
     return this.http.post(environment.backend + `/settings/items_group`, sysInfo, this.httpOptions);
   }
   updateItemsGroup(sysInfo,id): Observable<any> {
-    return this.http.put(environment.backend + `/settings/items_group/`, sysInfo, this.httpOptions);
+    return this.http.put(environment.backend + `/settings/items_group/`+id, sysInfo, this.httpOptions);
   }
 
   getItemsCategory() {
@@ -75,7 +75,7 @@ export class SettingsService {
     return this.http.post(environment.backend + `/settings/items_category`, sysInfo, this.httpOptions);
   }
   updateItemsCategory(sysInfo,id): Observable<any> {
-    return this.http.put(environment.backend + `/settings/items_category`+id, sysInfo, this.httpOptions);
+    return this.http.put(environment.backend + `/settings/items_category/`+id, sysInfo, this.httpOptions);
   }
 
   getShipping() {

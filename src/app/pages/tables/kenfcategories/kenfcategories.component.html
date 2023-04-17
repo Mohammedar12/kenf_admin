@@ -47,7 +47,7 @@
                   <tr *ngIf="table.isKenf">
                     <td><ngb-highlight [result]="table.id" [term]="service.searchTerm"></ngb-highlight></td>
                     <td>
-                      <ngb-highlight [result]="table.kenf_collection" [term]="service.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="table.name_en" [term]="service.searchTerm"></ngb-highlight>
                     </td>
                     <td>
                       <ngb-highlight [result]="table.name_ar" [term]="service.searchTerm"></ngb-highlight>
@@ -108,12 +108,12 @@
         <ngb-alert type="danger" *ngIf="error" [dismissible]="false">{{ error }}</ngb-alert>
 
         <div class="form-group">
-          <label for="kenf_collection">Collection</label>
+          <label for="name_en">Collection</label>
 
-          <input type="text" formControlName="kenf_collection" class="form-control" id="kenf_collection"
-            [ngClass]="{ 'is-invalid': submitted && f.kenf_collection.errors }" />
-          <div *ngIf="submitted && f.kenf_collection.errors" class="invalid-feedback">
-            <div *ngIf="f.kenf_collection.errors.required"> Collection is required</div>
+          <input type="text" formControlName="name_en" class="form-control" id="name_en"
+            [ngClass]="{ 'is-invalid': submitted && f.name_en.errors }" />
+          <div *ngIf="submitted && f.name_en.errors" class="invalid-feedback">
+            <div *ngIf="f.name_en.errors.required"> Collection is required</div>
           </div>
         </div>
           <div class="form-group">
@@ -173,12 +173,12 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="kenf_collection">Collection</label>
+          <label for="name_en">Collection</label>
           
-          <input type="text" formControlName="kenf_collection" class="form-control" id="kenf_collection"
-          [ngClass]="{ 'is-invalid': submitted && f.kenf_collection.errors }" />
-          <div *ngIf="submitted && f.kenf_collection.errors" class="invalid-feedback">
-            <div *ngIf="f.kenf_collection.errors.required"> Collection is required</div>
+          <input type="text" formControlName="name_en" class="form-control" id="name_en"
+          [ngClass]="{ 'is-invalid': submitted && f.name_en.errors }" />
+          <div *ngIf="submitted && f.name_en.errors" class="invalid-feedback">
+            <div *ngIf="f.name_en.errors.required"> Collection is required</div>
           </div>
         </div>
         <div class="form-group">

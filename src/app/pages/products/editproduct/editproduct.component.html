@@ -72,7 +72,7 @@
                       <div class="document-display" (click)="onMainImageSelect(file)" [ngStyle]="{'border-color': (mainImage === file) ? 'blue' : ''}" style="cursor: pointer;">
                         <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                         </a>
-                        <img src="{{imageBackend + ''  + file.link}}" class="img-fluid mx-auto d-block">
+                        <img src="{{imageBackend + file.link}}" class="img-fluid mx-auto d-block">
                         <!-- <img src="{{backend + '/images/?id='  + image.id}}" alt=""
                             class="img-fluid mx-auto d-block"> -->
                       </div>
@@ -111,9 +111,9 @@
                 </div>
                 <div *ngIf="show_ringsize" class="form-group">
                   <label class="control-label">Size of ring</label>
-                  <ng-select [items]="ringSize" [ngClass]="{'is-invalid': submit && form.ring_sizerors}" bindLabel="name_en" bindValue="id" formControlName="ring_size"></ng-select>
-                  <div *ngIf="submit && form.ring_size.errors" class="invalid-feedback">
-                    <span *ngIf="form.ring_size.errors.required">Ring size is required.</span>
+                  <ng-select [items]="ringSize" [ngClass]="{'is-invalid': submit && form.ringSize.errors}" bindLabel="name_en" bindValue="id" formControlName="ringSize"></ng-select>
+                  <div *ngIf="submit && form.ringSize.errors" class="invalid-feedback">
+                    <span *ngIf="form.ringSize.errors.required">Ring size is required.</span>
                   </div>
                 </div>
                 <div class="form-group">

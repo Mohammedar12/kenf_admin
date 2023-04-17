@@ -22,7 +22,7 @@ export class Product {
   quantity: number;
   extra_price: number;
   group: ItemsGroup;
-  units: Units[];
+  unit: Units[];
   commission: number;
   description_ar: string;
   description_en: string;
