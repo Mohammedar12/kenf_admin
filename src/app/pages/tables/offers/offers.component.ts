@@ -154,15 +154,16 @@ export class OffersComponent implements OnInit {
       return;
     } else {
       this.setserv.createOffer(this.newForm.value).subscribe(data => {
-        this.tableData.push({ id: data.id,
-                              name_ar: data.name_ar,
-                              name_en: data.name_en,
-                              description_ar: data.description_ar,
-                              description_en: data.description_en,
-                              start_date: data.start_date,
-                              end_date: data.end_date,
-                              discount: data.discount,
-                              status: data.active });
+        data = data.data;
+        this.tableData = [{ id: data.id,
+          name_ar: data.name_ar,
+          name_en: data.name_en,
+          description_ar: data.description_ar,
+          description_en: data.description_en,
+          start_date: data.start_date,
+          end_date: data.end_date,
+          discount: data.discount,
+          status: data.active }].concat(this.tableData);
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
         modal.close();
@@ -181,16 +182,16 @@ export class OffersComponent implements OnInit {
       let id = post_data.id;
       delete post_data.id;
       this.setserv.updateOffer(post_data,id).subscribe(data => {
-        console.log(post_data);
-        let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
-        this.tableData[findIndex] = { id: post_data.id,
-                                      name_ar: post_data.name_ar,
-                                      name_en: post_data.name_en,
-                                      description_ar: post_data.description_ar,
-                                      description_en: post_data.description_en,
-                                      start_date: post_data.start_date,
-                                      end_date: post_data.end_date,
-                                      discount: post_data.discount,
+        data = this.editForm.getRawValue();
+        let findIndex = this.tableData.findIndex(val => val.id == data.id);
+        this.tableData[findIndex] = { id: data.id,
+                                      name_ar: data.name_ar,
+                                      name_en: data.name_en,
+                                      description_ar: data.description_ar,
+                                      description_en: data.description_en,
+                                      start_date: data.start_date,
+                                      end_date: data.end_date,
+                                      discount: data.discount,
                                       status: this.tableData[findIndex].status };
         this.sharedDataService.changeTable(this.tableData);
         this.submittedEdit = false;

@@ -157,7 +157,7 @@ export class KenfcategoriesComponent implements OnInit {
       return;
     } else {
       this.setserv.createItemsCategory({...this.newForm.value, isKenf: true}).subscribe(data => {
-        this.tableData.push({id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: data.images.map(item => ({id: item}))});
+        this.tableData = [{id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: this.files}].concat(this.tableData);
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
         modal.close();
@@ -177,8 +177,9 @@ export class KenfcategoriesComponent implements OnInit {
       let id = post_data.id;
       delete post_data.id;
       this.setserv.updateItemsCategory({...post_data, images: post_data.images, isKenf: true},id).subscribe(data => {
-        let findIndex =   this.tableData.findIndex(data => data.id == post_data.id);
-        this.tableData[findIndex] = {...post_data, status: this.tableData[findIndex].status, active: true, deleted: false, isKenf: true, images: post_data.images.map(item => ({id: item}))};
+        data = this.editForm.getRawValue();
+        let findIndex =   this.tableData.findIndex(val => val.id == data.id);
+        this.tableData[findIndex] = {...data, status: this.tableData[findIndex].status, active: true, deleted: false, isKenf: true, images: this.files};
         this.sharedDataService.changeTable(this.tableData);
         this.submittedEdit = false;
         modal.close();

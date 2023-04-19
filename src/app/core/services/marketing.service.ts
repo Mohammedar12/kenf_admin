@@ -113,8 +113,8 @@ export class MarketingService {
       return response.data; 
     }));
   }
-  hideProduct(sysInfo) {
-    return this.http.post<Product>(environment.backend + `/product/hide`, sysInfo, this.httpOptions);
+  hideProduct(hidden,id) {
+    return this.http.put<Product>(environment.backend + `/product/`+id, { hidden: hidden }, this.httpOptions);
   }
   createShop(sysInfo): Observable<any> {
     return this.http.post(environment.backend + `/shop`, sysInfo, this.httpOptions);
@@ -128,7 +128,7 @@ export class MarketingService {
     }));
   }
   getShop(id) {
-    return this.http.get<Shop>(environment.backend + `/shop?id=`+id, this.httpOptions).pipe( map( (response: any) => { 
+    return this.http.get<Shop>(environment.backend + `/shop/`+id, this.httpOptions).pipe( map( (response: any) => { 
       return response.data; 
     }));
   }

@@ -69,7 +69,7 @@
                 <div *ngIf="files.length>0" class="dropzone-display">
                   <div class="row">
                     <div *ngFor="let file of files" class="col-md-4">
-                      <div class="document-display" (click)="onMainImageSelect(file)" [ngStyle]="{'border-color': (mainImage === file) ? 'blue' : ''}" style="cursor: pointer;">
+                      <div class="document-display" (click)="onMainImageSelect(file)" [ngStyle]="{'border-color': (mainImage?.id === file.id) ? 'blue' : ''}" style="cursor: pointer;">
                         <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                         </a>
                         <img src="{{imageBackend + file.link}}" class="img-fluid mx-auto d-block">

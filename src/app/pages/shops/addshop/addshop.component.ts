@@ -35,14 +35,8 @@ export class AddshopComponent implements OnInit {
 
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'Shops' }, { label: 'Add Shop', active: true }];
-    this.userService.getAll(1).subscribe( val =>   {
-      // let owners = this.route.snapshot.data.owners;
-      let owners = [];
-      val.docs.forEach(element => owners.push({...element}));
-      this.owners = owners;
-      // this.customersData = val,
-      console.log('Owner - ', this.owners);
-    });
+    
+    this.owners = this.route.snapshot.data.owners;
 
     this.productForm = this.formBuilder.group({
       seller: [null, [Validators.required]],
@@ -50,7 +44,6 @@ export class AddshopComponent implements OnInit {
       app_name_en: ['', [Validators.required]],
       app_abbreviation: ['', [Validators.required]],
       phone: ['', [Validators.required]],
-      mobile: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       address_en: ['', [Validators.required]],
       address_ar: ['', [Validators.required]],

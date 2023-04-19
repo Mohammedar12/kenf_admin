@@ -7,6 +7,7 @@ import { EditShopComponent } from './editshop/editshop.component';
 
 import { ShopResolver } from '../../core/resolvers/shop.resolver';
 import { UsersResolver } from '../../core/resolvers/users.resolver';
+import { SellerAllResolver } from '../../core/resolvers/seller_all.resolver';
 
 
 const routes: Routes = [
@@ -15,7 +16,7 @@ const routes: Routes = [
     {
         path: 'add',
         component: AddshopComponent,
-        // resolve: {owners: UsersResolver}
+        resolve: {owners: SellerAllResolver}
 
     },
     {
@@ -25,7 +26,7 @@ const routes: Routes = [
     {
         path: 'edit/:id',
         component: EditShopComponent,
-        resolve: {owners: UsersResolver, shop: ShopResolver}
+        resolve: {owners: SellerAllResolver, shop: ShopResolver}
 
     },
 ];

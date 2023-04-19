@@ -135,16 +135,23 @@
     <div class="modal-body">
 
       <ngb-alert type="danger" *ngIf="error" [dismissible]="false">{{ error }}</ngb-alert>
-      <div class="barcodePanel">
+      <!-- <div class="barcodePanel">
         <img [src]="barcodeImage"class="img-fluid mx-auto d-block">
-      </div>
+      </div> -->
       <div class="d-flex justify-content-center">
         <qrcode [qrdata]="generateQrcode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
       </div>
-      {{ generateQrcode }}
+      <div class="d-flex justify-content-center gap-2">
+        <input [(ngModel)]="custom_barcode"/>
+        <button type="button" (click)="updateQr()" *ngIf="barcodeUpdating === false">Update</button>
+        <div class="text-success" *ngIf="barcodeUpdating === true">
+          <i class="bx bx-loader bx-spin font-size-18 align-middle mr-2"></i>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+
       <!-- <button class="btn btn-primary" (click)="generateBC()">Generate a new code</button> -->
 
     </div>

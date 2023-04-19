@@ -23,7 +23,7 @@ export class ProductdetailComponent implements OnInit {
     if(this.productDetail.mainImage){
       let mainImageIndex = -1;
       for(let i=0;i<this.productDetail.images.length;i++){
-        if(this.productDetail.images[i].id == this.productDetail.mainImage){
+        if(this.productDetail.images[i].id == this.productDetail.mainImage.id){
           mainImageIndex = i;
           break;
         }

@@ -34,9 +34,10 @@ export class ProductsComponent implements OnInit {
   form: FormGroup;
   barcodeImage = "";
   generateQrcode = "";
-  selectedId: number;
+  selectedId: string;
   backend = environment.backend;
   imageBackend = environment.imageBackend;
+  custom_barcode = "";
   priceoption: Options = {
     floor: 0,
     ceil: 800,
@@ -60,6 +61,7 @@ export class ProductsComponent implements OnInit {
   appliedItems_category: any[] = [];
   appliedItems_group: any[] = [];
   appliedSearch: string;
+  barcodeUpdating = false;
 
   constructor(private modalService: NgbModal,
     private _fb: FormBuilder,
@@ -88,27 +90,26 @@ export class ProductsComponent implements OnInit {
   openModal(content, id) {
     this.selectedId = id;
     let product = this.products.docs.filter(data => data.id == id)[0];
-    let index = this.products.docs.indexOf(product);
-
-    let shopAbbreviation = product.shop?.app_abbreviation;
-    let groupAbbreviation = product.group?.abbreviation;
-    let categoryAbbreviation = product.category?.abbreviation;
-    let purity = product.purity[0].name_en;
-    let zero = '000000';
-
-    console.log(product)
-
-    this.generateQrcode = shopAbbreviation + '-' + groupAbbreviation + categoryAbbreviation + purity + zero.substring(product.id.toString().length) + product.id;
-
-    this.marketingService.generateBarcode({barcode: this.generateQrcode},id).subscribe((responseData) => {
-      //this.products[index].barcode = this.barcodeImage;
-      this.barcodeImage = this.generateQrcode;
-        this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-          console.log(`Closed with: ${result}`);
-        }, (reason) => {
-          console.log(`Dismissed ${this.getDismissReason(reason)}`);
-        });
+    this.generateQrcode = product.barcode;
+    this.barcodeImage = product.barcode;
+    this.custom_barcode = product.barcode;
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      console.log(`Closed with: ${result}`);
+    }, (reason) => {
+      console.log(`Dismissed ${this.getDismissReason(reason)}`);
     });
+
+    //this.generateQrcode = shopAbbreviation + '-' + groupAbbreviation + categoryAbbreviation + purity + zero.substring(product.id.toString().length) + product.id;
+
+    // this.marketingService.generateBarcode({barcode: this.generateQrcode},id).subscribe((responseData) => {
+    //   //this.products[index].barcode = this.barcodeImage;
+    //   this.barcodeImage = this.generateQrcode;
+    //     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    //       console.log(`Closed with: ${result}`);
+    //     }, (reason) => {
+    //       console.log(`Dismissed ${this.getDismissReason(reason)}`);
+    //     });
+    // });
   }
 
   onChange(event) {
@@ -117,6 +118,22 @@ export class ProductsComponent implements OnInit {
       this.querry.shops.push(element.id)
     });
     this.form.controls.shops.setValue(this.querry.shops);
+  }
+
+  updateQr(){
+    this.barcodeUpdating = true;
+    let newBarcode = this.custom_barcode;
+    this.marketingService.generateBarcode({barcode: newBarcode},this.selectedId).subscribe((responseData) => {
+      let product = this.products.docs.filter(data => data.id === this.selectedId)[0];
+      let index = this.products.docs.indexOf(product);
+      this.products.docs[index].barcode = newBarcode;
+      this.generateQrcode = newBarcode;
+      this.barcodeImage = newBarcode;
+      this.barcodeUpdating = false;
+    },(err)=>{
+      this.barcodeUpdating = false;
+      console.log(err);
+    });
   }
 
   toggleGroup({ target }, id) {
@@ -162,7 +179,7 @@ export class ProductsComponent implements OnInit {
   }
 
   hideItem(id, hidden) {
-    this.marketingService.hideProduct({id: id, hide: hidden}).subscribe(data => {
+    this.marketingService.hideProduct(!hidden,id).subscribe(data => {
       console.log('the product is hidden' + id);
       this.products.docs.filter(item => item.id === id)[0].hidden = !hidden;
     });
@@ -193,7 +210,7 @@ export class ProductsComponent implements OnInit {
         if(products.docs[i].mainImage && products.docs[i].mainImage?.id){
           let mainImageIndex = -1;
           for(let j=0;j<products.docs[i].images.length;j++){
-            if(products.docs[i].images[j].id === products.docs[i].mainImage){
+            if(products.docs[i].images[j].id === products.docs[i].mainImage.id){
               mainImageIndex = j;
               break;
             }

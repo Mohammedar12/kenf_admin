@@ -103,17 +103,7 @@
                     </div> -->
                 </div>
 
-                <div class="form-group">
-                  <label for="phone">Phone No.</label>
-                  <input id="phone" name="phone" type="text" class="form-control" formControlName="phone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
-
-                  <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
-                    <span *ngIf="f.phone.errors.required">Phone No. is required.</span>
-                  </div>
-                  <!-- <div *ngIf="submit && form.name.errors" class="invalid-feedback">
-                      <span *ngIf="form.name.errors.required">Phone is required.</span>
-                    </div> -->
-                </div>
+                
 
 
                 <div class="form-group">
@@ -143,7 +133,7 @@
               <div class="col-sm-6">
                 <div class="form-group">
                   <label class="control-label">Owner</label>
-                  <ng-select [ngClass]="{ 'is-invalid': submitted && f.seller.errors }" [items]="owners" bindLabel="email" bindValue="_id" formControlName="seller"></ng-select>
+                  <ng-select [ngClass]="{ 'is-invalid': submitted && f.seller.errors }" [items]="owners" bindLabel="email" bindValue="id" formControlName="seller"></ng-select>
                   <div *ngIf="submitted && f.seller.errors" class="invalid-feedback">
                     <span *ngIf="f.seller.errors.required">Owner is required.</span>
                   </div>
@@ -152,14 +142,15 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="mobile">Mobile No.</label>
-                  <input id="mobile" name="mobile" type="text" class="form-control" formControlName="mobile" [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }" />
-                  <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
-                    <span *ngIf="f.mobile.errors.required">Mobile No. is required.</span>
+                  <label for="phone">Phone No.</label>
+                  <input id="phone" name="phone" type="text" class="form-control" formControlName="phone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
+
+                  <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                    <span *ngIf="f.phone.errors.required">Phone No. is required.</span>
                   </div>
                   <!-- <div *ngIf="submit && form.name.errors" class="invalid-feedback">
-                          <span *ngIf="form.name.errors.required">Mobile is required.</span>
-                        </div> -->
+                      <span *ngIf="form.name.errors.required">Phone is required.</span>
+                    </div> -->
                 </div>
 
                 <div class="form-group">

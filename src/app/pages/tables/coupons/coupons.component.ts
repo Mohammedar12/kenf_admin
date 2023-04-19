@@ -230,22 +230,23 @@ export class CouponsComponent implements OnInit {
           delete post_data.max_discount;
         }
         this.setserv.createCoupon(post_data).subscribe(data => {
-          this.tableData.push({ id: data.id,
-                                user: data.user,
-                                email: data.email,
-                                code: data.code,
-                                discount_type: data.discount_type,
-                                discount: data.discount,
-                                max_discount: data.max_discount,
-                                freeShipping: data.freeShipping,
-                                profit: data.profit,
-                                profit_type: data.profit_type,
-                                total_purchase_condition: data.total_purchase_condition,
-                                included_category: this.items_category.filter(item => item.id === this.newForm.value.included_category)[0],
-                                except_discounted_product: data.except_discounted_product,
-                                start_date: data.start_date,
-                                end_date: data.end_date,
-                              });
+          data = data.data;
+          this.tableData = [{ id: data.id,
+            user: data.user,
+            email: data.email,
+            code: data.code,
+            discount_type: data.discount_type,
+            discount: data.discount,
+            max_discount: data.max_discount,
+            freeShipping: data.freeShipping,
+            profit: data.profit,
+            profit_type: data.profit_type,
+            total_purchase_condition: data.total_purchase_condition,
+            included_category: this.items_category.filter(item => item.id === this.newForm.value.included_category)[0],
+            except_discounted_product: data.except_discounted_product,
+            start_date: data.start_date,
+            end_date: data.end_date,
+          }].concat(this.tableData);
           this.sharedDataService.changeTable(this.tableData);
           this.submitted = false;
           modal.close();
@@ -267,23 +268,24 @@ export class CouponsComponent implements OnInit {
           delete post_data.max_discount;
         }
         this.setserv.updateCoupon(post_data,id).subscribe(data => {
-          let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
+          data = this.editForm.getRawValue();
+          let findIndex = this.tableData.findIndex(val => val.id == data.id);
           this.tableData[findIndex] = {
-                                        id: post_data.id,
-                                        user: post_data.user,
-                                        email: post_data.email,
-                                        code: post_data.code,
-                                        discount_type: post_data.discount_type,
-                                        discount: post_data.discount,
-                                        max_discount: post_data.max_discount,
-                                        freeShipping: post_data.freeShipping,
-                                        profit: post_data.profit,
-                                        profit_type: post_data.profit_type,
-                                        total_purchase_condition: post_data.total_purchase_condition,
+                                        id: data.id,
+                                        user: data.user,
+                                        email: data.email,
+                                        code: data.code,
+                                        discount_type: data.discount_type,
+                                        discount: data.discount,
+                                        max_discount: data.max_discount,
+                                        freeShipping: data.freeShipping,
+                                        profit: data.profit,
+                                        profit_type: data.profit_type,
+                                        total_purchase_condition: data.total_purchase_condition,
                                         included_category: this.items_category.filter(item => item.id === this.newForm.value.included_category)[0],
-                                        except_discounted_product: post_data.except_discounted_product,
-                                        start_date: post_data.start_date,
-                                        end_date: post_data.end_date,
+                                        except_discounted_product: data.except_discounted_product,
+                                        start_date: data.start_date,
+                                        end_date: data.end_date,
                                       };
           this.sharedDataService.changeTable(this.tableData);
           this.submittedEdit = false;

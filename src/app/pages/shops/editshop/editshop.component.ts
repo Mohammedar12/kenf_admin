@@ -40,14 +40,8 @@ export class EditShopComponent implements OnInit {
 
   ngOnInit() {
     this.breadCrumbItems = [{ label: 'Shops' }, { label: 'Edit Shop', active: true }];
-    this.userService.getAll().subscribe( val =>   {
-      // let owners = this.route.snapshot.data.owners;
-      let owners = [];
-      val.forEach(element => owners.push({...element}));
-      this.owners = owners;
-      console.log('Owners', this.owners);
-      // this.customersData = val,
-    });
+  
+    this.owners = this.route.snapshot.data.owners;
 
     this.files = this.customersData.images;
 
@@ -60,7 +54,6 @@ export class EditShopComponent implements OnInit {
       app_name_en: [this.customersData.app_name_en, [Validators.required]],
       app_abbreviation: [this.customersData.app_abbreviation, [Validators.required]],
       phone: [this.customersData.phone, [Validators.required]],
-      mobile: [this.customersData.mobile, [Validators.required]],
       email: [this.customersData.email, [Validators.required, Validators.email]],
       address_en: [this.customersData.address_en, [Validators.required]],
       address_ar: [this.customersData.address_ar, [Validators.required]],

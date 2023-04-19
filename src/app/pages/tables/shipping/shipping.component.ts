@@ -151,8 +151,8 @@ export class ShippingComponent implements OnInit {
       return;
     } else {
       this.setserv.createShipping(this.newForm.value).subscribe(data => {
-        console.log('onsubmit', data)
-        this.tableData.push({id: data.id, company: data.company, price: data.price, time: data.time});
+        data = data.data;
+        this.tableData = [{id: data.id, company: data.company, price: data.price, time: data.time}].concat(this.tableData);
         this.sharedDataShippingService.changeTable(this.tableData);
         this.submitted = false;
         modal.close();
@@ -172,8 +172,9 @@ export class ShippingComponent implements OnInit {
       let id = post_data.id;
       delete post_data.id;
       this.setserv.updateShipping(post_data,id).subscribe(data => {
-        let findIndex = this.tableData.findIndex(data => data.id == post_data.id);
-        this.tableData[findIndex] = {id: post_data.id, company: post_data.company, price: post_data.price, time: post_data.time};
+        data = this.editForm.getRawValue();
+        let findIndex = this.tableData.findIndex(val => val.id == data.id);
+        this.tableData[findIndex] = {id: data.id, company: data.company, price: data.price, time: data.time};
         this.sharedDataShippingService.changeTable(this.tableData);
         this.submittedEdit = false;
         modal.close();

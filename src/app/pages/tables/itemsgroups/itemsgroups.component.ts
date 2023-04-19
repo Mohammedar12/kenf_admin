@@ -159,7 +159,7 @@ export class ItemsgroupsComponent implements OnInit {
     } else {
       this.setserv.createItemsGroup(this.newForm.value).subscribe(data => {
         data = data.data;
-        this.tableData.docs = [{id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: data.images}].concat(this.tableData.docs);
+        this.tableData.docs = [{id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: this.files}].concat(this.tableData.docs);
         this.tableData.totalDocs +=  1;
         this.sharedDataService.changeTable(this.tableData);
         this.service.page = 1;
@@ -183,7 +183,7 @@ export class ItemsgroupsComponent implements OnInit {
       this.setserv.updateItemsGroup(post_data,id).subscribe(data => {
         data = this.editForm.getRawValue();
         let findIndex = this.tableData.docs.findIndex(val => val.id == data.id);
-        this.tableData.docs[findIndex] = {id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: this.tableData.docs[findIndex]?.status, images: data.images};
+        this.tableData.docs[findIndex] = {id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: this.tableData.docs[findIndex]?.status, images: this.files};
         this.sharedDataService.changeTable(this.tableData);
         this.service.page = this.service.page;
         this.submittedEdit = false;
