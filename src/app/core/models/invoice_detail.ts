@@ -2,10 +2,10 @@ interface Product {
 
 }
 export interface InvoiceDetail {
-    customer_id: any;
+    customer: any;
     _id: string;
     id: string;
-    order_id: string;
+    tryoto_id: string;
     createdAt: string;
     totalPrice: number;
     deliveryInfo: {
@@ -15,20 +15,34 @@ export interface InvoiceDetail {
         address: string;
         city: string;
         country: string;
-        postcode: string;
+        zipCode: string;
+    };
+    billingInfo: {
+        name: string;
+        email: string;
+        mobile: string;
+        address: string;
+        city: string;
+        country: string;
+        zipCode: string;
     };
     price: number;
-    discountValue: number;
+    discount: number;
     shippingPrice: number;
-    products: [Product];
+    items: [{
+        product: Product;
+        price: number;
+        quantity: number;
+    }];
+    paymentInfo:{
+        invoiceId: string,
+        completedAt: string,
+    };
     tax: number;
     qrCode: string;
-    shipping_id: {
+    shipping: {
+        id: string;
         company: string;
         time: string;
     },
-    purity_id: [{
-        name_ar: string;
-        name_en: string;
-    }]
 }

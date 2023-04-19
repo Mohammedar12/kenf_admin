@@ -13,17 +13,17 @@
           <div class="invoice-title" style="display: flex;justify-content: space-between;align-items: center;">
             <strong>Tax No: 311194062700003</strong>
             <img src="/assets/images/logo.png" style="width: 85px"/>
-            <h4 class="font-size-16">Order #{{ invoiceDetail.order_id }}</h4>
+            <h4 class="font-size-16">Order #{{ invoiceDetail.paymentInfo.invoiceId }}</h4>
           </div>
           <hr>
           <div class="row">
             <div class="col-6">
               <address>
                 <strong>Billed To:</strong><br>
-                {{ invoiceDetail.customer_id.billingAddress.fullname }}<br>
-                {{ invoiceDetail.customer_id.billingAddress.street }}<br>
-                {{ invoiceDetail.customer_id.billingAddress.city }}<br>
-                {{ invoiceDetail.customer_id.billingAddress.country }}, {{ invoiceDetail.customer_id.billingAddress.zipCode }}
+                {{ invoiceDetail.billingInfo.name }}<br>
+                {{ invoiceDetail.billingInfo.address }}<br>
+                {{ invoiceDetail.billingInfo.city }}<br>
+                {{ invoiceDetail.billingInfo.country }}, {{ invoiceDetail.billingInfo.zipCode }}
               </address>
             </div>
             <div class="col-6 text-right">
@@ -32,7 +32,7 @@
                 {{ invoiceDetail.deliveryInfo.name }}<br>
                 {{ invoiceDetail.deliveryInfo.address }}<br>
                 {{ invoiceDetail.deliveryInfo.city }}<br>
-                {{ invoiceDetail.deliveryInfo.country }}, {{ invoiceDetail.deliveryInfo.postcode }}
+                {{ invoiceDetail.deliveryInfo.country }}, {{ invoiceDetail.deliveryInfo.zipCode }}
               </address>
             </div>
           </div>
@@ -40,18 +40,18 @@
             <div class="col-6 mt-3">
               <address>
                 <strong></strong><br>
-                <b>Email: </b>{{ invoiceDetail.customer_id.billingAddress.email }}<br>
-                <b>Phone: </b>{{ invoiceDetail.customer_id.billingAddress.phone }}
+                <b>Email: </b>{{ invoiceDetail.billingInfo.email }}<br>
+                <b>Phone: </b>{{ invoiceDetail.billingInfo.mobile }}
               </address>
             </div>
             <div class="col-6 mt-3 text-right">
               <strong>Shipping Company: </strong><br>
-              {{ invoiceDetail.shipping_id.company }}<br>
+              {{ invoiceDetail.shipping.company }}<br>
               <strong>Shipping Time: </strong><br>
-              {{ invoiceDetail.shipping_id.time }}<br>
+              {{ invoiceDetail.shipping.time }}<br>
               <address>
                 <strong>Order Date:</strong><br>
-                {{ invoiceDetail.createdAt | date: 'longDate' }}<br><br>
+                {{ invoiceDetail.paymentInfo.completedAt | date: 'longDate' }}<br><br>
               </address>
             </div>
           </div>
@@ -66,16 +66,18 @@
                   <th>Item</th>
                   <th>Purity (Karats)</th>
                   <th>Weight</th>
+                  <th>Qty</th>
                   <th class="text-right">Price</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let product of invoiceDetail.products; let i = index">
+                <tr *ngFor="let item of invoiceDetail.items; let i = index">
                   <td>{{ i + 1 }}</td>
-                  <td>{{ product.description_en }}</td>
-                  <td>{{ product.purity_id[0].name_en }}</td>
-                  <td>{{ product.weight }}</td>
-                  <td class="text-right">SAR {{ product.extra_price }}</td>
+                  <td>{{ item.product.name_en }}</td>
+                  <td>{{ item.product.purity[0].name_en }}</td>
+                  <td>{{ item.product.weight }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td class="text-right">SAR {{ item.price }}</td>
                 </tr>
 
                 <tr>
@@ -91,7 +93,7 @@
                       <tr>
                         <td colspan="2" class="border-0 text-right">
                           <strong>Discount</strong></td>
-                        <td class="border-0 text-right">{{ invoiceDetail.discountValue }}</td>
+                        <td class="border-0 text-right">{{ invoiceDetail.discount }}</td>
                       </tr>
                       <tr>
                         <td colspan="2" class="border-0 text-right">

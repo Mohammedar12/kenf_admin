@@ -34,7 +34,7 @@ export class DetailComponent implements OnInit {
       });
       this.invoiceDetail.qrCode = btoa(JSON.stringify({
         name: "KENF",
-        date: dateFormatter.format(new Date(this.invoiceDetail.createdAt)),
+        date: dateFormatter.format(new Date(this.invoiceDetail.paymentInfo.completedAt)),
         invoice: this.invoiceDetail.totalPrice,
         tax: this.invoiceDetail.tax
       }));

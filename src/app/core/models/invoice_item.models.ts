@@ -1,10 +1,22 @@
 export interface InvoiceItem {
-    customer_id: any;
+    customer: any;
     _id: string;
     id: string;
-    order_id: string;
-    createdAt: string;
+    tryoto_id: string;
     totalPrice: string;
+    paymentInfo:{
+        invoiceId: string,
+        completedAt: string,
+    };
+    billingInfo: {
+        name: string;
+        email: string;
+        mobile: string;
+        address: string;
+        city: string;
+        country: string;
+        zipCode: string;
+    };
 }
 export interface paginatedInvoices {
     docs: InvoiceItem[],
