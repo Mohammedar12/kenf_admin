@@ -149,7 +149,7 @@
           <div class="row">
             <div *ngFor="let file of files" class="col-md-4">
               <div class="document-display">
-                <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
+                <a (click)="deleteImage(file.id)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                 </a>
                 <img src="{{imageBackend + ''  + file.link}}" class="img-fluid mx-auto d-block">
               </div>
@@ -222,7 +222,7 @@
           <div class="row">
             <div *ngFor="let file of files" class="col-md-4">
               <div class="document-display">
-                <a (click)="deleteImage(file)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
+                <a (click)="deleteImage(file.id)" class="delete-image"><i class="fas fa-trash-alt text-danger mr-1"></i>
                 </a>
                 <img src="{{imageBackend + ''  + file.link}}" class="img-fluid mx-auto d-block">
               </div>
