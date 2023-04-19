@@ -158,14 +158,14 @@ export class EditproductComponent implements OnInit {
   changeSepcialLoc(event){
     if(event?.name === 'Category'){
       this.items_category.forEach((val)=>{
-        if(val.id === this.productForm.get('category_id').value){
+        if(val.id === this.productForm.get('category').value){
           this.special_label = val.name;
           this.productForm.controls.special_cat_id.setValue(val.id);
         }
       });
     } else if(event?.name === 'Collection'){
       this.kenf_category.forEach((val)=>{
-        if(val.id === this.productForm.get('kenf_id').value){
+        if(val.id === this.productForm.get('kenf_collection').value){
           this.special_label = val.name;
           this.productForm.controls.special_cat_id.setValue(val.id);
         }

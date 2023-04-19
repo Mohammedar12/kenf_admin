@@ -173,11 +173,15 @@ export class MarketingService {
   }
 
   getInvoices(page) {
-    return this.http.get<paginatedInvoices>(environment.backend + `/order/invoice?page=${page}&limit=10`, this.httpOptions);
+    return this.http.get<paginatedInvoices>(environment.backend + `/order/invoice?page=${page}&limit=10`, this.httpOptions).pipe( map( (response: any) => { 
+      return response.data; 
+    }));;
   }
 
   getInvoiceById(id) {
-    return this.http.get<InvoiceDetail>(environment.backend + `/order/invoice/${id}`, this.httpOptions);
+    return this.http.get<InvoiceDetail>(environment.backend + `/order/invoice/${id}`, this.httpOptions).pipe( map( (response: any) => { 
+      return response.data; 
+    }));;
   }
 
   delCoupon(sysInfo) {
