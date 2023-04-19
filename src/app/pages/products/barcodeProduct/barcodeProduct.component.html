@@ -36,10 +36,10 @@
                       <ul ngbNav #nav="ngbNav" class="col-md-2 col-sm-3 col-4" orientation="vertical">
                         <li *ngFor="let myproduct of productDetail.images; let i = index" [ngbNavItem]="i" class="p-2">
                           <a ngbNavLink>
-                            <img src="{{backend + '/getfile/?id='  + myproduct.id}}" alt="" class="img-fluid mx-auto d-block rounded" />
+                            <img src="{{imageBackend + myproduct.link}}" alt="" class="img-fluid mx-auto d-block rounded" />
                           </a>
                           <ng-template ngbNavContent>
-                            <img src="{{backend + '/getfile/?id='  + myproduct.id}}" id="expandedImg" alt="" class="img-fluid mx-auto d-block">
+                            <img src="{{imageBackend + myproduct.link}}" id="expandedImg" alt="" class="img-fluid mx-auto d-block">
                           </ng-template>
                         </li>
                       </ul>

@@ -15,7 +15,7 @@ export class BarcodeProductComponent implements OnInit {
   barecode: string = "test";
   productDetail: Product;
   backend = environment.backend;
-
+  imageBackend = environment.imageBackend;
   constructor(private setserv: MarketingService) {
     this.config = setserv.getUploadConfig();
 

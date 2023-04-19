@@ -11,7 +11,7 @@ export interface InvoiceDetail {
     deliveryInfo: {
         name: string;
         email: string;
-        mobile: string;
+        phone: string;
         address: string;
         city: string;
         country: string;
@@ -20,7 +20,7 @@ export interface InvoiceDetail {
     billingInfo: {
         name: string;
         email: string;
-        mobile: string;
+        phone: string;
         address: string;
         city: string;
         country: string;

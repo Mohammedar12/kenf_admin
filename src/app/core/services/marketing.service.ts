@@ -103,7 +103,9 @@ export class MarketingService {
     return this.http.get<string>(environment.backend + `/product/getBarcode?barcode=` + sysInfo, this.httpOptions);
   }
   searchBarcode(sysInfo) {
-    return this.http.get<Product>(environment.backend + `/product/scanBarcode?barcode=` + sysInfo, this.httpOptions);
+    return this.http.get<Product>(environment.backend + `/product/admin/single?barcode=` + sysInfo, this.httpOptions).pipe( map( (response: any) => { 
+      return response.data; 
+    }));
   }
   delProduct(sysInfo) {
     return this.http.delete(environment.backend + `/product/` + sysInfo, this.httpOptions);
