@@ -41,6 +41,7 @@ export class AddproductComponent implements OnInit {
   isExclusive: boolean = false;
   items_color: any[] = [];
   show_ringsize: boolean = false;
+  mainImage: {id: string, link: string};
 
   constructor(private route: ActivatedRoute,private router: Router, public formBuilder: FormBuilder, private http: HttpClient, private setserv: MarketingService, private setservv: SettingsService) {
     this.config = setserv.getUploadConfig();
@@ -95,6 +96,7 @@ export class AddproductComponent implements OnInit {
       color: ['', [Validators.required]],
       images: ['', [Validators.required]],
       isExclusive: [false, [Validators.required]],
+      mainImage: [null, []],
     });
   }
 
@@ -129,6 +131,14 @@ export class AddproductComponent implements OnInit {
   deleteImage(id) {
       this.files = this.files.filter((val)=>val.id !== id);
       this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
+      if(this.mainImage?.id === id){
+        this.mainImage = null;
+        this.productForm.controls.mainImage.setValue(null);
+      }
+  }
+  onMainImageSelect(file){
+    this.mainImage = file;
+    this.productForm.controls.mainImage.setValue(file.id);
   }
   /**
    * Bootsrap validation form submit method
@@ -140,8 +150,12 @@ export class AddproductComponent implements OnInit {
       if (this.productForm.invalid) {
         return;
       } else {
-        console.log(this.productForm);
-        this.setserv.createProduct(this.productForm.value).subscribe(data => this.router.navigate(['/products/list']));
+        let post_data = this.productForm.getRawValue();
+        if(!post_data.mainImage){
+          delete post_data.mainImage;
+        }
+        console.log(post_data);
+        this.setserv.createProduct(post_data).subscribe(data => this.router.navigate(['/products/list']));
       }
     }
 }

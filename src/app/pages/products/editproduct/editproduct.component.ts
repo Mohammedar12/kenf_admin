@@ -199,6 +199,10 @@ export class EditproductComponent implements OnInit {
   deleteImage(id) {
       this.files = this.files.filter((val)=>val.id !== id);
       this.productForm.controls.images.setValue(this.files.map((val)=>val.id));
+      if(this.mainImage?.id === id){
+        this.mainImage = null;
+        this.productForm.controls.mainImage.setValue(null);
+      }
   }
   /**
    * Bootsrap validation form submit method

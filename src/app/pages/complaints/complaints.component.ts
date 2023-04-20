@@ -47,7 +47,8 @@ export class ComplaintsComponent implements OnInit {
 
     this.currentpage = 1;
     this.customerService.getComplaints().subscribe(val => {
-      this.customersData = val; console.log(val);
+      console.log(val);
+      this.customersData = val; 
     });
     this.editForm = this.formBuilder.group({
       id: [''],
@@ -70,6 +71,7 @@ export class ComplaintsComponent implements OnInit {
     this.editForm.controls['email'].setValue(newTable[0].email);
     this.editForm.controls['title'].setValue(newTable[0].title);
     this.editForm.controls['complaints'].setValue(newTable[0].complaints);
+    this.editForm.controls['answer'].setValue(newTable[0].answer ? newTable[0].answer : '');
 
     this.file = newTable[0].images;
     this.modalTitle = newTable[0].title;
@@ -107,9 +109,10 @@ export class ComplaintsComponent implements OnInit {
       let post_data = this.editForm.getRawValue();
       let id = post_data.id;
       delete post_data.id;
-      this.customerService.sendAnswer(post_data,id).subscribe(data => {
-        let findIndex = this.customersData.findIndex(data => data.id == post_data.id);
-        this.customersData[findIndex] = post_data;
+      this.customerService.sendAnswer({ answer: post_data.answer },id).subscribe(data => {
+        data = this.editForm.getRawValue();
+        let findIndex = this.customersData.findIndex(val => val.id == data.id);
+        this.customersData[findIndex] = data;
         this.submitted = false;
         modal.close();
       });

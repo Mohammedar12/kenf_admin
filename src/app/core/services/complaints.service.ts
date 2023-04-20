@@ -12,14 +12,14 @@ export class ComplaintsService {
 
   constructor(private http: HttpClient, private authService: AuthfakeauthenticationService) {
     this.authService.currentUser.subscribe(user => {
-      this.httpOptions = { headers: new HttpHeaders({ "x-auth-token": user.token }) };
+      this.httpOptions = { withCredentials: true };
     });
 
   }
 
 
   getComplaints() {
-    return this.http.get<any[]>(environment.backend + `/complaints?page=${1}&limit=${100}`, this.httpOptions).pipe( map( (response: any) => { 
+    return this.http.get(environment.backend + `/settings/complaints?page=${1}&limit=${100}`, this.httpOptions).pipe( map( (response: any) => { 
       return response.data.docs; 
     }));
   }
@@ -28,6 +28,6 @@ export class ComplaintsService {
   }
 
   sendAnswer(sysInfo,id): Observable<any> {
-    return this.http.post(environment.backend + `/settings/complaints/answer/`+id, sysInfo, this.httpOptions);
+    return this.http.put(environment.backend + `/settings/complaints/answer/`+id, sysInfo, this.httpOptions);
   }
 }
