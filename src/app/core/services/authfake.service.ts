@@ -42,9 +42,9 @@ export class AuthfakeauthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        this.http.post<any>(environment.backend+`/auth/logout`,{},this.httpOptions).pipe(map(data => {
+        this.http.post<any>(environment.backend+`/auth/logout`,{},this.httpOptions).subscribe(data => {
             localStorage.removeItem('currentUser');
             this.currentUserSubject.next(null);
-        }))
+        });
     }
 }
