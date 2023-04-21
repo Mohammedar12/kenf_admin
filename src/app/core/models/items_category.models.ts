@@ -5,7 +5,7 @@ export interface ItemsCategory {
     abbreviation: string;
     images: any[];
     status: string;
-
+    isKenf: boolean;
 }
 export interface SearchResult {
     tables: ItemsCategory[];

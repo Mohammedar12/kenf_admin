@@ -158,7 +158,7 @@ export class KenfcategoriesComponent implements OnInit {
     } else {
       this.setserv.createItemsCategory({...this.newForm.value, isKenf: true}).subscribe(data => {
         data = data.data;
-        this.tableData = [{id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: this.files}].concat(this.tableData);
+        this.tableData = [{id: data.id, name_ar: data.name_ar, name_en: data.name_en, abbreviation: data.abbreviation, status: data.active, images: this.files, isKenf: true}].concat(this.tableData);
         this.sharedDataService.changeTable(this.tableData);
         this.submitted = false;
         modal.close();

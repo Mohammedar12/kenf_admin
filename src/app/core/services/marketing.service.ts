@@ -135,7 +135,7 @@ export class MarketingService {
     }));
   }
   delShop(sysInfo) {
-    return this.http.delete(environment.backend + `/shop?id=` + sysInfo, this.httpOptions);
+    return this.http.delete(environment.backend + `/shop/` + sysInfo, this.httpOptions);
   }
   getMarketCategory() {
     return this.http.get<MarketCategory[]>(environment.backend + `/market/category?page=${1}&limit=${100}`, this.httpOptions).pipe( map( (response: any) => { 
