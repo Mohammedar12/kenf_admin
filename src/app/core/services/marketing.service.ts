@@ -183,7 +183,7 @@ export class MarketingService {
   getInvoiceById(id) {
     return this.http.get<InvoiceDetail>(environment.backend + `/order/invoice/${id}`, this.httpOptions).pipe( map( (response: any) => { 
       return response.data; 
-    }));;
+    }));
   }
 
   delCoupon(sysInfo) {
@@ -197,6 +197,8 @@ export class MarketingService {
   }
   
   getCouponAdminStats(id){
-    return this.http.get<any>(environment.backend + `/market/coupon/stats/${id}`, this.httpOptions);
+    return this.http.get<any>(environment.backend + `/market/coupon/stats/${id}`, this.httpOptions).pipe( map( (response: any) => { 
+      return response.data; 
+    }));
   }
 }
