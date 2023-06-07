@@ -11,7 +11,10 @@ import { AdvancedtableComponent } from './advancedtable/advancedtable.component'
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ItemsgroupsComponent } from './itemsgroups/itemsgroups.component';
 import { SharedDataService } from './itemsgroups/data';
+<<<<<<< HEAD
 import { SharedDataBrandsService } from './brands/data';
+=======
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
 import { SharedDataShippingService } from './shipping/data';
 import { SharedDataUnitsService } from './units/data';
 import { SharedDataItemsCatService } from './itemcategories/data';
@@ -32,7 +35,10 @@ import { SizesComponent } from './sizeofring/size.component';
 import { PaymentmethodComponent } from './paymentmethod/paymentmethod.component';
 import { MarketCategoriesComponent } from './marketcategories/marketcategories.component';
 import { ItemcategoriesComponent } from './itemcategories/itemcategories.component';
+<<<<<<< HEAD
 import { BrandsComponent } from './brands/Brands.component';
+=======
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
 import { KenfcategoriesComponent } from './kenfcategories/kenfcategories.component';
 import { ShippingComponent } from './shipping/shipping.component';
 import { OffersComponent } from './offers/offers.component';
@@ -49,9 +55,13 @@ const config: DropzoneConfigInterface = {
 };
 
 @NgModule({
+<<<<<<< HEAD
   declarations: [BasicComponent, AdvancedtableComponent, AdvancedSortableDirective, ItemsgroupsComponent, 
     KenfcategoriesComponent, ShippingComponent, UnitsComponent, KaratsComponent, SizesComponent, PaymentmethodComponent, MarketCategoriesComponent, 
     ItemcategoriesComponent, BrandsComponent, OffersComponent, CouponsComponent, UsergroupsComponent, OrderstatusComponent],
+=======
+  declarations: [BasicComponent, AdvancedtableComponent, AdvancedSortableDirective, ItemsgroupsComponent, KenfcategoriesComponent, ShippingComponent, UnitsComponent, KaratsComponent, SizesComponent, PaymentmethodComponent, MarketCategoriesComponent, ItemcategoriesComponent, OffersComponent, CouponsComponent, UsergroupsComponent, OrderstatusComponent],
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
   imports: [
     CommonModule,
     TablesRoutingModule,
@@ -70,7 +80,10 @@ const config: DropzoneConfigInterface = {
   ],
   providers: [
     SharedDataService,
+<<<<<<< HEAD
     SharedDataBrandsService,
+=======
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
     SharedDataShippingService,
     SharedDataItemsCatService,
     SharedDataItemsKenfService,

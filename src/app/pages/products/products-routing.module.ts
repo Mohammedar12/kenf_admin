@@ -6,7 +6,10 @@ import { UnitsResolver } from '../../core/resolvers/units.resolver';
 import { ItemsGroupResolver } from '../../core/resolvers/item_group.resolver';
 import { ItemsCategoryResolver } from '../../core/resolvers/item_category.resolver';
 import { ShopsResolver } from '../../core/resolvers/shops.resolver';
+<<<<<<< HEAD
 import { brandsResolver } from '../../core/resolvers/brands.resolver';
+=======
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
 import { ProductResolver } from '../../core/resolvers/product.resolver';
 import { AddproductComponent } from './addproduct/addproduct.component';
 import { ProductsComponent } from './products/products.component';
@@ -28,7 +31,11 @@ const routes: Routes = [
       unit: UnitsResolver,
       items_group: ItemsGroupResolver,
       shops: ShopsResolver,
+<<<<<<< HEAD
       brands : brandsResolver
+=======
+
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
     }
 
   },

@@ -38,7 +38,10 @@ export class AddproductComponent implements OnInit {
   purity: any[] = [];
   items_category: any[] = [];
   kenf_category: any[] = [];
+<<<<<<< HEAD
   brands: any[] = [];
+=======
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
   isExclusive: boolean = false;
   items_color: any[] = [];
   show_ringsize: boolean = false;
@@ -58,8 +61,11 @@ export class AddproductComponent implements OnInit {
     items_group.forEach(element => this.items_group.push({id: element.id, name: element.name_en}));
     let unit = this.route.snapshot.data.unit;
     unit.forEach(element => this.unit.push({id: element.id, name: element.name_en}));
+<<<<<<< HEAD
     let brands = this.route.snapshot.data.brands;
     brands.forEach(element => this.brands.push({id: element.id, name: element.name_en}));
+=======
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
     let items_category = this.route.snapshot.data.items_category;
     items_category.forEach(element => 
       {
@@ -98,7 +104,10 @@ export class AddproductComponent implements OnInit {
       description_en: ['', [Validators.required]],
       color: ['', [Validators.required]],
       images: ['', [Validators.required]],
+<<<<<<< HEAD
       brand: [null],
+=======
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
       isExclusive: [false, [Validators.required]],
       mainImage: [null, []],
     });

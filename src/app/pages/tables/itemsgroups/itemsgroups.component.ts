@@ -110,7 +110,11 @@ export class ItemsgroupsComponent implements OnInit {
   openEdit(content, id) {
     this.files = [];
     let newTable = this.tableData.docs.filter(data => data.id == id);
+<<<<<<< HEAD
     // this.files = newTable[0].images;
+=======
+    this.files = newTable[0].images;
+>>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
     this.editForm.controls['id'].setValue(newTable[0].id);
     this.editForm.controls['name_ar'].setValue(newTable[0].name_ar);
     this.editForm.controls['name_en'].setValue(newTable[0].name_en);
