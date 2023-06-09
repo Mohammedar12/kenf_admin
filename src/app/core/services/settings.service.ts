@@ -7,10 +7,7 @@ import { environment } from '../../../environments/environment';
 import { SysInfo } from '../models/sys_info.models';
 import { ItemsGroup } from '../models/items_group.models';
 import { ItemsCategory } from '../models/items_category.models';
-<<<<<<< HEAD
 import { Brands } from '../models/brands.models';
-=======
->>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
 import { Shipping } from '../models/shipping.models';
 import { Sizes } from '../models/sizes.models';
 import { Karats } from '../models/karats.models';
@@ -26,10 +23,7 @@ export class SettingsService {
   private httpOptions = {
     withCredentials: true, 
   };
-<<<<<<< HEAD
   
-=======
->>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
   constructor(private http: HttpClient, private authService: AuthfakeauthenticationService) {
     this.authService.currentUser.subscribe(user => {
       //this.httpOptions = { headers: new HttpHeaders({ "x-auth-token": user.token }) };
@@ -85,7 +79,6 @@ export class SettingsService {
   updateItemsCategory(sysInfo,id): Observable<any> {
     return this.http.put(environment.backend + `/settings/items_category/`+id, sysInfo, this.httpOptions);
   }
-<<<<<<< HEAD
   
   getBrands() {
     return this.http.get<Brands[]>(environment.backend + `/settings/brands`, this.httpOptions).pipe( map( (response: any) => { 
@@ -101,8 +94,6 @@ export class SettingsService {
   updateBrands(sysInfo,id): Observable<any> {
     return this.http.put(environment.backend + `/settings/brands/`+id, sysInfo, this.httpOptions);
   }
-=======
->>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
 
   getShipping() {
     return this.http.get<Shipping[]>(environment.backend + `/settings/shipping?page=${1}&limit=${100}`, this.httpOptions).pipe( map( (response: any) => { 

@@ -10,10 +10,7 @@ import { SizesComponent } from './sizeofring/size.component';
 import { PaymentmethodComponent } from './paymentmethod/paymentmethod.component';
 import { MarketCategoriesComponent } from './marketcategories/marketcategories.component';
 import { ItemcategoriesComponent } from './itemcategories/itemcategories.component';
-<<<<<<< HEAD
 import { BrandsComponent } from './brands/Brands.component';
-=======
->>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
 import { KenfcategoriesComponent } from './kenfcategories/kenfcategories.component';
 import { ShippingComponent } from './shipping/shipping.component';
 import { OffersComponent } from './offers/offers.component';
@@ -37,13 +34,10 @@ const routes: Routes = [
         component: ItemsgroupsComponent,
     },
     {
-<<<<<<< HEAD
         path: 'brands',
         component: BrandsComponent,
     },
     {
-=======
->>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
         path: 'units',
         component: UnitsComponent,
     },

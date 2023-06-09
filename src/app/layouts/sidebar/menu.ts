@@ -45,15 +45,12 @@ export const MENU: MenuItem[] = [
             },
             {
                 id: 1141,
-<<<<<<< HEAD
                 label: 'Brands',
                 link: '/settings/brands',
                 parentId: 114
             },
             {
                 id: 1141,
-=======
->>>>>>> ce1acbb808d75cd502c7dd391965dbc2c45bcb3d
                 label: 'Shipping',
                 link: '/settings/shipping',
                 parentId: 114
