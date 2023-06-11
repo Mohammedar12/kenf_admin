@@ -97,6 +97,14 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="control-label">Brand</label>
+                  <ng-select [items]="brands" [ngClass]="{'is-invalid': submit && form.brand.errors}" bindLabel="name"
+                    bindValue="id" formControlName="brand"></ng-select>
+                  <div *ngIf="submit && form.brand.errors" class="invalid-feedback">
+                    <span *ngIf="form.brand.errors.required">Brand is required.</span>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="control-label">Purity (Karats)</label>
                   <ng-select [items]="purity" [ngClass]="{'is-invalid': submit && form.purity.errors}" bindLabel="name" bindValue="id" formControlName="purity" [multiple]="true"></ng-select>
                   <div *ngIf="submit && form.purity.errors" class="invalid-feedback">
